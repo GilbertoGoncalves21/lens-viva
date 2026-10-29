@@ -1,0 +1,154 @@
+:host {
+    .lens-demo {
+        margin: auto;
+        max-width: 32rem;
+        padding: 1.5rem 1.25rem 2rem;
+    }
+    .lens-demo-intro h2 {
+        font-family: var(--lens-font-brand);
+        font-size: 1.9rem;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        margin: 0.75rem 0 0.5rem;
+    }
+    .lens-demo-intro p {
+        color: var(--lens-text-secondary);
+        font-size: 0.8125rem;
+        line-height: 1.6;
+        margin: 0;
+    }
+    .lens-demo-badge {
+        background: #6366f11a;
+        border: 1px solid #818cf83d;
+        border-radius: 999px;
+        color: var(--lens-indigo-soft);
+        font-size: 0.625rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        padding: 0.4rem 0.65rem;
+        text-transform: uppercase;
+    }
+    .lens-demo-scenarios {
+        background: var(--lens-surface-1);
+        border: 1px solid var(--lens-border-subtle);
+        border-radius: 0.9rem;
+        display: flex;
+        gap: 0.25rem;
+        margin-block: 1.25rem;
+        padding: 0.25rem;
+    }
+    .lens-demo-scenarios button {
+        background: transparent;
+        border: 0;
+        border-radius: 0.65rem;
+        color: var(--lens-text-secondary);
+        flex: 1;
+        font: inherit;
+        font-size: 0.75rem;
+        min-height: 44px;
+        padding: 0.5rem;
+        white-space: nowrap;
+    }
+    .lens-demo-scenarios button[aria-pressed='true'] {
+        background: var(--lens-surface-3);
+        box-shadow: 0 2px 5px #02061740;
+        color: var(--lens-text-primary);
+    }
+    .lens-demo-frame {
+        aspect-ratio: 4 / 5;
+        border: 1px solid #f5edd633;
+        border-radius: 1.5rem;
+        box-shadow: var(--lens-shadow-lg);
+        isolation: isolate;
+        overflow: hidden;
+        position: relative;
+    }
+    .lens-demo-paper {
+        background: radial-gradient(ellipse at top right, #fffbeb, transparent), #e7dfca;
+        color: #323a38;
+        height: 100%;
+        padding: 2rem 1.75rem;
+        position: absolute;
+        width: 100%;
+    }
+    .lens-demo-paper-category {
+        font-size: 0.5rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+    }
+    .lens-demo-paper h3 {
+        font-family: Georgia, serif;
+        font-size: 1.8rem;
+        font-weight: 400;
+        margin: 0.75rem 0;
+    }
+    .lens-demo-rule {
+        background: #323a3866;
+        display: block;
+        height: 1px;
+        width: 3rem;
+    }
+    .lens-demo-paper p {
+        font-family: Georgia, serif;
+        font-size: 1.6rem;
+        left: 10%;
+        line-height: 1.4;
+        margin: 0;
+        position: absolute;
+        width: 80%;
+    }
+    .lens-demo-paper-footer {
+        bottom: 1.5rem;
+        font-size: 0.5rem;
+        left: 1.75rem;
+        letter-spacing: 0.18em;
+        position: absolute;
+    }
+    app-overlay-layer {
+        inset: 0;
+        pointer-events: none;
+        position: absolute;
+    }
+    .lens-demo-caption {
+        color: var(--lens-text-secondary);
+        display: flex;
+        flex-wrap: wrap;
+        font-size: 0.625rem;
+        gap: 0.5rem;
+        justify-content: space-between;
+        margin: 0.75rem 0 1rem;
+    }
+    .lens-demo-compare,
+    .lens-demo-camera {
+        align-items: center;
+        border-radius: 0.9rem;
+        display: flex;
+        font: inherit;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        justify-content: center;
+        min-height: 48px;
+        padding: 0.75rem 1rem;
+        text-align: center;
+        text-decoration: none;
+        width: 100%;
+    }
+    .lens-demo-compare {
+        background: var(--lens-surface-2);
+        border: 1px solid var(--lens-border-strong);
+        color: var(--lens-text-primary);
+    }
+    .lens-demo-camera {
+        background: var(--lens-indigo-strong);
+        color: #fff;
+        gap: 0.75rem;
+        margin-top: 0.75rem;
+    }
+    .lens-demo-note {
+        color: var(--lens-text-secondary);
+        font-size: 0.6875rem;
+        line-height: 1.5;
+        margin: 0.75rem 0 0;
+        text-align: center;
+    }
+}

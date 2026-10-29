@@ -22,6 +22,10 @@ const routes: Routes = [
         component: HistoryComponent,
     },
     {
+        path: 'demo',
+        loadComponent: () => import('./demo/demo.component').then(module => module.DemoComponent),
+    },
+    {
         path: 'languages',
         component: LanguagesComponent,
     },

@@ -220,6 +220,7 @@ interface SceneLanguageServiceFake {
 }
 
 interface SessionControllerServiceFake {
+    retryFailedTranslations: Mock<() => void>;
     changes: Mock<() => Observable<SessionState>>;
     openAppSettings: Mock<() => Promise<void>>;
     setManualSourceLanguage: Mock<(language: string) => void>;
@@ -631,6 +632,7 @@ describe('CameraComponent', () => {
             state: scene$.value,
         };
         sessionControllerService = {
+            retryFailedTranslations: vi.fn(),
             changes: vi.fn<() => Observable<SessionState>>(() => state$.asObservable()),
             openAppSettings: vi.fn<() => Promise<void>>(() => Promise.resolve()),
             setManualSourceLanguage: vi.fn<(language: string) => void>(),
@@ -684,6 +686,36 @@ describe('CameraComponent', () => {
         } else {
             Reflect.deleteProperty(view, RESIZE_OBSERVER_PROPERTY);
         }
+    });
+
+    it('should show a compact automatic-language label and preserve the full source name', async () => {
+        await enter();
+        settings$.next({ ...settings$.value, sourceLanguage: AUTO_LANGUAGE });
+        const source = query('#camera-language-pair strong');
+        expect(source?.textContent).toBe('languages.autoShort');
+        expect(source?.getAttribute('title')).toBeTruthy();
+        expect(query('#camera-language-pair')?.getAttribute('href')).toBe('/languages');
+    });
+
+    it('should offer translation recovery without resuming or restarting a frozen camera', async () => {
+        await enter();
+        emitState(SessionStatus.FROZEN);
+        await emitItems([createItem({ status: OverlayStatus.ERROR, translatedText: '' })]);
+        sessionControllerService.start.mockClear();
+        query('#camera-retry-translations')?.click();
+        expect(sessionControllerService.retryFailedTranslations).toHaveBeenCalledTimes(1);
+        expect(sessionControllerService.start).not.toHaveBeenCalled();
+        expect(sessionControllerService.toggleFreeze).not.toHaveBeenCalled();
+        expect(component.frozen).toBe(true);
+    });
+
+    it('should not count text already in the target language as a new translation', async () => {
+        await enter();
+        emitState(SessionStatus.RUNNING);
+        await emitItems([createItem({ status: OverlayStatus.TRANSLATED, sourceLanguage: component.targetLanguage })]);
+        expect(component.translatedCount).toBe(0);
+        expect(component.textAlreadyInTargetLanguage).toBe(true);
+        expect(text('.lens-progress')).toContain('camera.alreadyInTarget');
     });
 
     it('should create', () => {

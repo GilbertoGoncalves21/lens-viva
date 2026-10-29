@@ -40,6 +40,10 @@ export class OnlineTranslationService {
         }
     }
 
+    clearNotice(): void {
+        this.notice.set(null);
+    }
+
     async translate(request: TranslationRequest): Promise<string> {
         if (!this.available) {
             throw new Error('ONLINE_TRANSLATION_UNAVAILABLE');

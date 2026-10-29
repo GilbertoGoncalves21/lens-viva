@@ -42,7 +42,8 @@
         color: var(--lens-balloon-color);
         display: flex;
         flex-direction: column;
-        inset: 12px;
+        inset: auto 12px 12px;
+        max-height: 70%;
         position: absolute;
 
         header {

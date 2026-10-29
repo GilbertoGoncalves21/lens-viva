@@ -684,7 +684,7 @@ describe('OverlayLayerComponent', () => {
         expect(textRule).toContain('white-space:nowrap');
         expect(textRule).toContain('overflow-wrap:normal');
         ['line-clamp', 'text-overflow', 'ellipsis', 'overflow:hidden', 'max-height', 'max-width'].forEach((forbidden: string) => {
-            expect(styles).not.toContain(forbidden);
+            expect(balloonRule + textRule).not.toContain(forbidden);
         });
     });
 

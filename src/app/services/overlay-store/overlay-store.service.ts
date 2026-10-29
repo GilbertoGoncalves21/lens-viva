@@ -102,6 +102,19 @@ export class OverlayStoreService {
         return result.pendingTranslations;
     }
 
+    retryFailedTranslations(): OverlayItem[] {
+        return this.transition(
+            (item: OverlayItem) => item.status === OverlayStatus.ERROR,
+            (item: OverlayItem) => ({
+                ...item,
+                failedAt: null,
+                failedAttempts: 0,
+                status: OverlayStatus.READING,
+                textVersion: item.textVersion + 1,
+            }),
+        );
+    }
+
     resetTranslations(): OverlayItem[] {
         return this.transition(
             (): boolean => true,

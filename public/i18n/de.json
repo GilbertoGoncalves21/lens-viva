@@ -71,7 +71,23 @@
     "readingHint": "Lange Zeilen seitlich scrollen. Text antippen, um das Original zu sehen.",
     "onlineMode": "Online · Text wird an den Server gesendet",
     "onlineUncertain": "Text unklar. Kamera näher halten oder ein schärferes Bild einfrieren.",
-    "onlineUnavailable": "Online-Übersetzung nicht verfügbar. Server und Verbindung prüfen."
+    "onlineUnavailable": "Online-Übersetzung nicht verfügbar. Server und Verbindung prüfen.",
+    "eyebrow": "Dein visueller Übersetzer",
+    "headline": "Erfassen. Lesen. Verstehen.",
+    "exploreDemo": "Entdecken",
+    "sessionStatus": "Kamerastatus",
+    "stateFrozen": "Bild angehalten",
+    "stateLive": "Live",
+    "modeOnline": "Online-Übersetzung",
+    "modeOnDevice": "Auf dem Gerät",
+    "modeOffline": "Keine Verbindung",
+    "translationFailedTitle": "Ein Teil des Textes wurde nicht übersetzt",
+    "translationFailedMessage": "Prüfe die Sprachen und versuche es erneut. Das Bild kann angehalten bleiben.",
+    "translating": "Text wird übersetzt…",
+    "translationsReady": "{{count}} Übersetzungen bereit",
+    "captureHint": "Richte die Kamera auf den Text und halte sie ruhig",
+    "freezeHint": "Halte das Bild an, um in Ruhe zu lesen und das Original zu prüfen.",
+    "alreadyInTarget": "Der Text ist bereits auf {{language}}"
   },
   "languages": {
     "title": "Sprachen",
@@ -112,7 +128,8 @@
     "translatingInto": "Zielsprache: {{language}}",
     "changeAppLanguage": "App-Sprache ändern",
     "target": "Übersetzen in",
-    "onlineReady": "Online: Sätze mit Kontext, keine Pflichtpakete."
+    "onlineReady": "Online: Sätze mit Kontext, keine Pflichtpakete.",
+    "autoShort": "Automatisch"
   },
   "settings": {
     "title": "Einstellungen",
@@ -222,5 +239,22 @@
   "splash": {
     "loading": "Lens Viva wird geladen…",
     "tagline": "Sieh die Welt ohne Barrieren"
+  },
+  "demo": {
+    "title": "Lens Viva entdecken",
+    "badge": "Interaktive Demo",
+    "headline": "Eine neue Art zu lesen.",
+    "description": "Entdecke vorbereitete Beispiele ohne Kamera oder Einrichtung.",
+    "chooseScene": "Beispiel auswählen",
+    "phrase": "Satz",
+    "menu": "Speisekarte",
+    "paragraph": "Langer Text",
+    "previewLabel": "Vorschau mit Beispielübersetzungen",
+    "sampleResults": "Beispielergebnisse",
+    "showOriginal": "Mit dem Original vergleichen",
+    "showTranslation": "Übersetzung anzeigen",
+    "openCamera": "Meine Kamera verwenden",
+    "note": "Simulierte Beispiele. Diese Seite führt keine OCR oder Übersetzungsanfragen aus.",
+    "languagePair": "Englisch → Portugiesisch"
   }
 }

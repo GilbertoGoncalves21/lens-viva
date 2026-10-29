@@ -71,7 +71,23 @@
     "readingHint": "長い行は横にスクロールして読めます。テキストをタップすると原文を表示します。",
     "onlineMode": "オンライン・文字をサーバーに送信",
     "onlineUncertain": "文字が不明瞭です。カメラを近づけるか、鮮明な画像を固定してください。",
-    "onlineUnavailable": "オンライン翻訳を利用できません。サーバーと接続をご確認ください。"
+    "onlineUnavailable": "オンライン翻訳を利用できません。サーバーと接続をご確認ください。",
+    "eyebrow": "カメラで見る翻訳",
+    "headline": "かざして、読んで、理解する。",
+    "exploreDemo": "体験する",
+    "sessionStatus": "カメラの状態",
+    "stateFrozen": "画像を固定中",
+    "stateLive": "ライブ",
+    "modeOnline": "オンライン翻訳",
+    "modeOnDevice": "端末内で処理",
+    "modeOffline": "接続なし",
+    "translationFailedTitle": "一部のテキストを翻訳できませんでした",
+    "translationFailedMessage": "言語を確認して、もう一度お試しください。画像は固定したままにできます。",
+    "translating": "翻訳中…",
+    "translationsReady": "{{count}} 件の翻訳が完了",
+    "captureHint": "文字を枠内に入れ、カメラを安定させてください",
+    "freezeHint": "画像を固定して、ゆっくり読んだり原文を確認できます。",
+    "alreadyInTarget": "テキストはすでに {{language}} です"
   },
   "languages": {
     "title": "言語",
@@ -112,7 +128,8 @@
     "autoDetectNote": "Lens Vivaは読み取った文字から言語を識別します。識別できない場合は言語を選択してください。",
     "translatingInto": "{{language}}に翻訳",
     "changeAppLanguage": "アプリの言語を変更",
-    "onlineReady": "オンライン：文脈に沿った翻訳、言語パック不要。"
+    "onlineReady": "オンライン：文脈に沿った翻訳、言語パック不要。",
+    "autoShort": "自動"
   },
   "settings": {
     "title": "設定",
@@ -222,5 +239,22 @@
   "splash": {
     "loading": "Lens Vivaを読み込み中…",
     "tagline": "言葉の壁を越えて世界を見る"
+  },
+  "demo": {
+    "title": "Lens Viva を体験",
+    "badge": "操作できるデモ",
+    "headline": "新しい読み方を体験。",
+    "description": "カメラや設定なしで、用意された例をお試しください。",
+    "chooseScene": "例を選択",
+    "phrase": "短い文",
+    "menu": "メニュー",
+    "paragraph": "長い文章",
+    "previewLabel": "翻訳例のプレビュー",
+    "sampleResults": "サンプルの結果",
+    "showOriginal": "原文と比較",
+    "showTranslation": "翻訳を表示",
+    "openCamera": "カメラを使う",
+    "note": "この画面はサンプルです。文字認識や翻訳リクエストは行いません。",
+    "languagePair": "英語 → ポルトガル語"
   }
 }

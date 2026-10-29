@@ -12,6 +12,22 @@
     </ion-button>
 
     <section class="lens-camera position-absolute top-0 start-0 w-100 h-100 d-flex overflow-hidden" [class.lens-camera-native]="nativePlatform">
+        <header class="lens-camera-heading">
+            <section>
+                <p class="lens-eyebrow">{{ 'camera.eyebrow' | translate }}</p>
+                <h2>{{ 'camera.headline' | translate }}</h2>
+            </section>
+            <a class="lens-demo-link" routerLink="/demo">{{ 'camera.exploreDemo' | translate }} <span aria-hidden="true">↗</span></a>
+        </header>
+        @if (cameraVisible) {
+            <section class="lens-session-bar" [attr.aria-label]="'camera.sessionStatus' | translate">
+                <span class="lens-session-state" [class.lens-session-frozen]="frozen">
+                    <span aria-hidden="true"></span>
+                    {{ (frozen ? 'camera.stateFrozen' : 'camera.stateLive') | translate }}
+                </span>
+                <span>{{ processingModeKey | translate }}</span>
+            </section>
+        }
         <section #cameraStage class="lens-stage flex-grow-1 d-flex align-items-center justify-content-center">
             <section
                 #cameraFrame
@@ -271,7 +287,7 @@
             <a id="camera-language-pair" class="lens-language-card" routerLink="/languages">
                 <span class="lens-language-column">
                     <small>{{ 'languages.source' | translate }}</small>
-                    <strong>{{ (sceneLanguage || sourceLanguage) | languageName: currentLanguage }}</strong>
+                    <strong [attr.title]="(sceneLanguage || sourceLanguage) | languageName: currentLanguage">{{ (!sceneLanguage && sourceLanguage === automaticLanguage) ? ('languages.autoShort' | translate) : ((sceneLanguage || sourceLanguage) | languageName: currentLanguage) }}</strong>
                 </span>
                 <ion-icon [icon]="pairArrowIcon" aria-hidden="true"></ion-icon>
                 <span class="lens-language-column">
@@ -280,11 +296,28 @@
                 </span>
                 <ion-icon [icon]="editLanguagesIcon" aria-hidden="true"></ion-icon>
             </a>
-            @if (onlineTranslationAvailable) {
-                <p class="lens-status-note m-0">{{ 'camera.onlineMode' | translate }}</p>
-                @if (onlineNoticeKey; as notice) {
-                    <p class="lens-status-note m-0" role="status">{{ notice | translate }}</p>
-                }
+            @if (failedTranslations) {
+                <section class="lens-translation-recovery" role="status">
+                    <section>
+                        <strong>{{ 'camera.translationFailedTitle' | translate }}</strong>
+                        <p>{{ (onlineNoticeKey || 'camera.translationFailedMessage') | translate }}</p>
+                    </section>
+                    <button id="camera-retry-translations" type="button" (click)="retryTranslations()">{{ 'common.retry' | translate }}</button>
+                </section>
+            } @else if (cameraVisible) {
+                <p class="lens-progress" role="status" aria-live="polite">
+                    @if (translating) {
+                        <ion-spinner class="lens-status-spinner" name="crescent" aria-hidden="true"></ion-spinner>
+                        {{ 'camera.translating' | translate }}
+                    } @else if (translatedCount > 0) {
+                        <span class="lens-progress-check" aria-hidden="true">✓</span>
+                        {{ 'camera.translationsReady' | translate: { count: translatedCount } }}
+                    } @else if (textAlreadyInTargetLanguage) {
+                        {{ 'camera.alreadyInTarget' | translate: { language: (targetLanguage | languageName: currentLanguage) } }}
+                    } @else {
+                        {{ 'camera.captureHint' | translate }}
+                    }
+                </p>
             }
             <section class="lens-status-line d-flex flex-column align-items-center justify-content-center w-100 mt-auto" role="status" aria-live="polite" [id]="statusLineId">
                 @switch (statusLine) {
@@ -373,6 +406,8 @@
                         class="lens-shutter d-flex flex-column align-items-center gap-1"
                         [class.lens-shutter-frozen]="frozen"
                         [id]="freezeButtonId"
+                        [disabled]="freezePending"
+                        [attr.aria-busy]="freezePending"
                         [attr.aria-label]="(frozen ? 'camera.resumeLive' : 'camera.freeze') | translate"
                         (click)="toggleFreeze()"
                     >
@@ -386,6 +421,10 @@
 
                     <section class="lens-control-slot flex-shrink-0"></section>
                 </section>
+            }
+
+            @if (showFreezeButton) {
+                <p class="lens-capture-help">{{ (frozen ? 'camera.frozen' : 'camera.freezeHint') | translate }}</p>
             }
 
             <ion-select

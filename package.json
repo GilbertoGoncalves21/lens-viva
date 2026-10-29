@@ -1,6 +1,6 @@
 {
   "name": "lens-viva",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Camera text recognition and translation with on-device Android processing and optional contextual Gemini translation.",
   "engines": {
     "node": "^22.22.3 || ^24.15.0 || >=26.0.0",

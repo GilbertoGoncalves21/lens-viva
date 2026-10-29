@@ -111,8 +111,8 @@
         flex: 1;
         gap: 4px;
         min-width: 0;
-        small { color: var(--lens-text-secondary); font-size: 0.7rem; }
-        strong { font-size: 0.9rem; overflow-wrap: anywhere; }
+        small { color: var(--lens-text-secondary); font-size: 0.7rem; white-space: nowrap; }
+        strong { font-size: 0.9rem; overflow-wrap: normal; overflow-x: auto; scrollbar-width: thin; white-space: nowrap; word-break: normal; }
     }
 
     .lens-status-label {

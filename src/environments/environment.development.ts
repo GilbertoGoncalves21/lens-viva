@@ -1,5 +1,5 @@
 export const environment: { appVersion: string; engineVersion: string; production: boolean } = {
-    appVersion: '0.1.2',
-    engineVersion: 'context-3',
+    appVersion: '0.2.0',
+    engineVersion: 'context-4',
     production: false,
 };

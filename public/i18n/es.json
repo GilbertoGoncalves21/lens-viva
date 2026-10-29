@@ -71,7 +71,23 @@
     "readingHint": "Desliza hacia los lados para leer líneas largas. Toca el texto para ver el original.",
     "onlineMode": "En línea · texto enviado al servidor",
     "onlineUncertain": "El texto es incierto. Acerca la cámara o congela una imagen más nítida.",
-    "onlineUnavailable": "Traducción en línea no disponible. Revisa el servidor y la conexión."
+    "onlineUnavailable": "Traducción en línea no disponible. Revisa el servidor y la conexión.",
+    "eyebrow": "Tu traductor visual",
+    "headline": "Apunta. Lee. Entiende.",
+    "exploreDemo": "Explorar",
+    "sessionStatus": "Estado de la cámara",
+    "stateFrozen": "Imagen congelada",
+    "stateLive": "En vivo",
+    "modeOnline": "Traducción en línea",
+    "modeOnDevice": "En el dispositivo",
+    "modeOffline": "Sin conexión",
+    "translationFailedTitle": "Parte del texto no se pudo traducir",
+    "translationFailedMessage": "Revisa los idiomas e inténtalo de nuevo. Puedes mantener la imagen congelada.",
+    "translating": "Traduciendo el texto…",
+    "translationsReady": "{{count}} traducciones listas",
+    "captureHint": "Encuadra el texto y mantén la cámara estable",
+    "freezeHint": "Congela para leer con calma y consultar el original.",
+    "alreadyInTarget": "El texto ya está en {{language}}"
   },
   "languages": {
     "title": "Idiomas",
@@ -112,7 +128,8 @@
     "translatingInto": "Traduciendo al {{language}}",
     "changeAppLanguage": "Cambiar idioma de la app",
     "target": "Traducir a",
-    "onlineReady": "En línea: frases con contexto, sin paquetes obligatorios."
+    "onlineReady": "En línea: frases con contexto, sin paquetes obligatorios.",
+    "autoShort": "Automático"
   },
   "settings": {
     "title": "Configuración",
@@ -222,5 +239,22 @@
   "splash": {
     "loading": "Cargando Lens Viva…",
     "tagline": "Mira el mundo sin barreras"
+  },
+  "demo": {
+    "title": "Explorar Lens Viva",
+    "badge": "Demostración interactiva",
+    "headline": "Una nueva forma de leer.",
+    "description": "Explora ejemplos preparados, sin cámara ni configuración.",
+    "chooseScene": "Elige un ejemplo",
+    "phrase": "Frase",
+    "menu": "Menú",
+    "paragraph": "Texto largo",
+    "previewLabel": "Vista previa con traducciones de ejemplo",
+    "sampleResults": "Resultados ilustrativos",
+    "showOriginal": "Comparar con el original",
+    "showTranslation": "Mostrar traducción",
+    "openCamera": "Usar mi cámara",
+    "note": "Ejemplos simulados. Esta pantalla no realiza OCR ni solicitudes de traducción.",
+    "languagePair": "Inglés → Portugués"
   }
 }

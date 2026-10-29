@@ -1,0 +1,204 @@
+:host {
+    .lens-camera-heading {
+        align-items: center;
+        display: flex;
+        flex-shrink: 0;
+        gap: 1rem;
+        justify-content: space-between;
+        margin-inline: auto;
+        max-width: 42rem;
+        padding: 1rem 1.25rem 0.75rem;
+        position: relative;
+        width: 100%;
+        z-index: 1;
+
+        h2 {
+            font-family: var(--lens-font-brand);
+            font-size: clamp(1.2rem, 4.5vw, 1.65rem);
+            font-weight: 800;
+            letter-spacing: -0.035em;
+            margin: 0;
+        }
+    }
+
+    .lens-eyebrow {
+        color: var(--lens-text-secondary);
+        font-size: 0.625rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        margin: 0 0 0.3rem;
+        text-transform: uppercase;
+    }
+    .lens-demo-link {
+        align-items: center;
+        color: var(--lens-indigo-soft);
+        display: inline-flex;
+        flex-shrink: 0;
+        font-size: 0.75rem;
+        gap: 0.4rem;
+        min-height: 44px;
+        text-decoration: none;
+    }
+    .lens-session-bar {
+        align-items: center;
+        color: var(--lens-text-secondary);
+        display: flex;
+        flex-shrink: 0;
+        font-size: 0.6875rem;
+        justify-content: space-between;
+        margin-inline: auto;
+        max-width: 36rem;
+        padding: 0.25rem 1.25rem;
+        position: relative;
+        width: 100%;
+        z-index: 1;
+    }
+    .lens-session-state {
+        align-items: center;
+        color: #a7f3d0;
+        display: inline-flex;
+        font-weight: 600;
+        gap: 0.4rem;
+    }
+    .lens-session-state > span {
+        background: currentColor;
+        border-radius: 50%;
+        height: 6px;
+        width: 6px;
+    }
+    .lens-session-frozen {
+        color: var(--lens-amber-text);
+    }
+
+    .lens-controls {
+        background: linear-gradient(180deg, #0f172a, var(--lens-surface-0));
+        border: 1px solid var(--lens-border-subtle);
+        border-bottom: 0;
+        border-radius: 1.75rem 1.75rem 0 0;
+        margin-inline: auto;
+        max-height: 48%;
+        max-width: 40rem;
+        padding-top: 1rem !important;
+        width: 100%;
+    }
+    .lens-language-card {
+        background: #1e293b80;
+        border-color: #e5e7eb24;
+        border-radius: 1rem;
+    }
+    .lens-language-column small {
+        font-size: 0.6875rem;
+    }
+    .lens-language-column strong {
+        font-size: 0.9375rem;
+    }
+    .lens-progress {
+        align-items: center;
+        color: var(--lens-text-secondary);
+        display: flex;
+        font-size: 0.75rem;
+        gap: 0.4rem;
+        justify-content: center;
+        margin: 0.5rem 0 0;
+        min-height: 1.25rem;
+        text-align: center;
+    }
+    .lens-progress-check {
+        color: #a7f3d0;
+    }
+    .lens-status-line:empty {
+        display: none;
+    }
+    .lens-capture-help {
+        color: var(--lens-text-secondary);
+        font-size: 0.6875rem;
+        line-height: 1.5;
+        margin: 0.25rem 0 0;
+        max-width: 26rem;
+        text-align: center;
+    }
+    .lens-shutter:disabled {
+        cursor: wait;
+        opacity: 0.6;
+    }
+    .lens-translation-recovery {
+        align-items: center;
+        background: #f59e0b12;
+        border: 1px solid #f59e0b40;
+        border-radius: 1rem;
+        display: flex;
+        gap: 0.75rem;
+        margin-block: 0.5rem;
+        max-width: 34rem;
+        padding: 0.75rem;
+        width: 100%;
+    }
+    .lens-translation-recovery strong {
+        color: var(--lens-amber-text);
+        font-size: 0.75rem;
+    }
+    .lens-translation-recovery p {
+        color: var(--lens-text-body);
+        font-size: 0.6875rem;
+        line-height: 1.5;
+        margin: 0.25rem 0 0;
+    }
+    .lens-translation-recovery button {
+        background: transparent;
+        border: 1px solid #fcd34d66;
+        border-radius: 0.75rem;
+        color: var(--lens-amber-text);
+        flex-shrink: 0;
+        font: inherit;
+        font-size: 0.75rem;
+        min-height: 44px;
+        padding-inline: 0.5rem;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 32rem) {
+    :host {
+        .lens-camera-heading,
+        .lens-session-bar,
+        .lens-capture-help {
+            display: none;
+        }
+        .lens-controls {
+            border-bottom: 1px solid var(--lens-border-subtle);
+            border-radius: 1.25rem;
+            flex-basis: 13rem;
+            max-height: 100%;
+        }
+
+        .lens-language-card {
+            align-items: stretch;
+            flex-direction: column;
+            gap: 0.25rem;
+            padding: 0.625rem 0.75rem;
+        }
+        .lens-language-card > ion-icon:first-of-type {
+            align-self: center;
+            height: 14px;
+            transform: rotate(90deg);
+        }
+        .lens-language-card > ion-icon:last-of-type {
+            display: none;
+        }
+        .lens-language-column strong {
+            font-size: 0.8125rem;
+        }
+        .lens-control-row {
+            gap: 0.5rem !important;
+        }
+    }
+}
+
+@media (max-height: 650px) and (orientation: portrait) {
+    :host .lens-camera-heading {
+        padding-block: 0.25rem;
+    }
+    :host .lens-eyebrow,
+    :host .lens-capture-help {
+        display: none;
+    }
+}

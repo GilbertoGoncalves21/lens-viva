@@ -70,6 +70,10 @@ Block translations use a compact rendered line height rather than covering the f
 
 ## Extending the project
 
+Failed translations can be retried through the session controller and coordinator without resuming a frozen capture. Only error regions are reset, and their incremented text versions reject late results. Queued requests capture their translation mode and endpoint so execution cannot silently change their cache namespace. The rationale is recorded in [ADR 002](decisions/002-translation-routing-and-recovery.md).
+
+The standalone `/demo` route uses curated fixtures with the same overlay component as the camera. It is explicitly simulated and does not invoke platform or provider services. See [ADR 003](decisions/003-readable-overlays-and-demonstration.md).
+
 | Change                             | Primary location                                              |
 | ---------------------------------- | ------------------------------------------------------------- |
 | Add or revise a screen             | `src/app/pages/`                                              |

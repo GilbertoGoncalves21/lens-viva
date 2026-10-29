@@ -12,6 +12,8 @@ import { HashUtils } from 'src/app/shared/utils';
 
 interface PendingTranslation {
     key: string;
+    online: boolean;
+    endpoint: string;
     request: TranslationRequest;
 }
 
@@ -49,7 +51,9 @@ export class TranslationQueueService {
     }
 
     enqueue(request: TranslationRequest): void {
-        const key: string = this.keyFor(request);
+        const online: boolean = this.onlineTranslationService.available;
+        const endpoint: string = this.onlineTranslationService.cacheIdentity;
+        const key: string = this.keyFor(request, online, endpoint);
         const cached: string | null = this.translationCacheService.get(key);
 
         this._pending.delete(request.regionId);
@@ -59,7 +63,7 @@ export class TranslationQueueService {
             return;
         }
 
-        this._pending.set(request.regionId, { key: key, request: request });
+        this._pending.set(request.regionId, { key: key, online: online, endpoint: endpoint, request: request });
         this.drain();
     }
 
@@ -78,9 +82,9 @@ export class TranslationQueueService {
         });
     }
 
-    private keyFor(request: TranslationRequest): string {
-        const version: string = this.onlineTranslationService.available
-            ? `${environment.engineVersion}:online:${HashUtils.fnv1a(this.onlineTranslationService.cacheIdentity + (request.contextText ?? request.text))}`
+    private keyFor(request: TranslationRequest, online: boolean, endpoint: string): string {
+        const version: string = online
+            ? `${environment.engineVersion}:online:${HashUtils.fnv1a(endpoint + (request.contextText ?? request.text))}`
             : request.context === 'menu' ? `${environment.engineVersion}:menu` : environment.engineVersion;
         return TranslationKeyUtils.build(request.text, request.languagePair, version);
     }
@@ -108,10 +112,15 @@ export class TranslationQueueService {
             return inFlight;
         }
 
+        // A queued request must not change provider or cache namespace while it waits.
+        if (pending.online && pending.endpoint !== this.onlineTranslationService.cacheIdentity) {
+            throw new Error('TRANSLATION_ENDPOINT_CHANGED');
+        }
+
         const menuTranslation: string | null = pending.request.context === 'menu'
             ? MenuTranslationUtils.translate(pending.request.text, pending.request.languagePair)
             : null;
-        const translation: Promise<string> = (this.onlineTranslationService.available
+        const translation: Promise<string> = (pending.online
             ? this.onlineTranslationService.translate(pending.request)
             : menuTranslation !== null
             ? Promise.resolve(menuTranslation)

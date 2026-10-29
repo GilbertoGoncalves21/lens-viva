@@ -47,6 +47,23 @@ describe('OverlayStoreService', () => {
         return service.reconcile([createRegion('Daily Specials', UPPER_RECT), createRegion('Chocolate cake', LOWER_RECT)], now);
     }
 
+    it('should retry only failed regions without losing the frame or successful translations', () => {
+        const [failed, successful] = seedTwoRegions();
+        service.markTranslating([failed.regionId, successful.regionId], 'en');
+        service.applyTranslation({ regionId: failed.regionId, textVersion: 1, failed: true, translatedText: '' });
+        service.applyTranslation({ regionId: successful.regionId, textVersion: 1, failed: false, translatedText: 'Bolo de chocolate' });
+        const ready = findItem(successful.regionId);
+
+        const retried = service.retryFailedTranslations();
+
+        expect(retried).toHaveLength(1);
+        expect(retried[0]).toMatchObject({ regionId: failed.regionId, originalText: failed.originalText, anchorRect: failed.anchorRect, status: OverlayStatus.READING, textVersion: 2 });
+        expect(findItem(successful.regionId)).toBe(ready);
+        service.markTranslating([failed.regionId], 'en');
+        expect(service.applyTranslation({ regionId: failed.regionId, textVersion: 1, failed: false, translatedText: 'Stale result' })).toBeNull();
+        expect(findItem(failed.regionId)?.status).toBe(OverlayStatus.TRANSLATING);
+    });
+
     it('should start empty and emit the current items on subscription', () => {
         expect(service.items).toEqual([]);
         expect(emissions).toEqual([[]]);

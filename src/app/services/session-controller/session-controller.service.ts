@@ -79,6 +79,12 @@ export class SessionControllerService {
         return this.lensEngineService.openAppSettings();
     }
 
+    retryFailedTranslations(): void {
+        if (this.state.status === SessionStatus.RUNNING || this.state.status === SessionStatus.FROZEN) {
+            this.recognitionCoordinatorService.retryFailedTranslations();
+        }
+    }
+
     setManualSourceLanguage(language: string): void {
         this.recognitionCoordinatorService.setManualSourceLanguage(language);
     }

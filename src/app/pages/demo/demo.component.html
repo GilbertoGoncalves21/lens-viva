@@ -1,0 +1,59 @@
+<app-layout [title]="'demo.title' | translate" backHref="/camera">
+    <main class="lens-demo">
+        <header class="lens-demo-intro">
+            <span class="lens-demo-badge">{{ 'demo.badge' | translate }}</span>
+            <h2>{{ 'demo.headline' | translate }}</h2>
+            <p>{{ 'demo.description' | translate }}</p>
+        </header>
+        <section
+            class="lens-demo-scenarios"
+            role="group"
+            [attr.aria-label]="'demo.chooseScene' | translate"
+        >
+            @for (option of scenes; track option.id) {
+                <button
+                    type="button"
+                    [attr.aria-pressed]="scene().id === option.id"
+                    (click)="selectScene(option)"
+                >
+                    {{ option.titleKey | translate }}
+                </button>
+            }
+        </section>
+        <section class="lens-demo-frame" [attr.aria-label]="'demo.previewLabel' | translate">
+            <section class="lens-demo-paper" aria-hidden="true">
+                <span class="lens-demo-paper-category">{{ scene().category }}</span>
+                <h3>{{ scene().title }}</h3>
+                <span class="lens-demo-rule"></span>
+                @for (line of scene().lines; track line.original) {
+                    <p [style.top.%]="line.y * 100">{{ line.original }}</p>
+                }
+                <span class="lens-demo-paper-footer">LENS VIVA / FIELD NOTES</span>
+            </section>
+            <app-overlay-layer
+                [items]="items()"
+                [frozen]="true"
+                [granularity]="block"
+                sourceLanguage="en"
+                targetLanguage="pt"
+                (balloonToggled)="toggleOriginal($event)"
+            />
+        </section>
+        <section class="lens-demo-caption">
+            <span>{{ 'demo.languagePair' | translate }}</span>
+            <span>{{ 'demo.sampleResults' | translate }}</span>
+        </section>
+        <button
+            type="button"
+            class="lens-demo-compare"
+            [attr.aria-pressed]="showingOriginal()"
+            (click)="compare()"
+        >
+            {{ (showingOriginal() ? 'demo.showTranslation' : 'demo.showOriginal') | translate }}
+        </button>
+        <a class="lens-demo-camera" routerLink="/camera"
+            >{{ 'demo.openCamera' | translate }} <span aria-hidden="true">→</span></a
+        >
+        <p class="lens-demo-note">{{ 'demo.note' | translate }}</p>
+    </main>
+</app-layout>

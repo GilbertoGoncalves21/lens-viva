@@ -24,9 +24,11 @@ Lens Viva is a camera translation app built with Angular, Ionic, and Capacitor. 
 
 Android uses a custom Kotlin camera engine with Google ML Kit for on-device recognition and offline translation. The browser implementation uses Tesseract.js for recognition and the browser's Translator API when available. An optional Node.js server adds Gemini translation using complete phrases and scene context.
 
-**Project status:** version **0.1.2**, in active development. Android is the native platform included in this repository; browser support depends on available camera and translation APIs. Online translation requires your own server configuration and provider credentials.
+**Project status:** version **0.2.0**, in active development. Android is the native platform included in this repository; browser support depends on available camera and translation APIs. Online translation requires your own server configuration and provider credentials.
 
 ## Features
+
+Try the interactive examples at **http://localhost:4200/demo** after starting the development server. The demo reuses the app's overlay renderer with clearly labeled sample results; it needs no camera, provider account, or language downloads.
 
 - **Live camera translation:** tracked text regions keep overlays aligned as the scene changes.
 - **Readable overlays:** translations stay on a single line without splitting words. Dense scenes switch to a scrollable reading panel.
@@ -227,6 +229,8 @@ Dependencies, caches, build output, APKs, logs, signing material, and local envi
 - [Architecture](docs/ARCHITECTURE.md): platform engines, recognition, translation, and rendering.
 - [Translation server](server/README.md): configuration, deployment, and API contract.
 - [Contributing](CONTRIBUTING.md): focused changes, translation updates, and validation expectations.
+- [Engineering decisions](docs/decisions/README.md): constraints, alternatives, consequences, and regression evidence.
+- [Validation guide](docs/VALIDATION.md): automated checks, browser review, and remaining real-device/provider checks.
 
 ## License
 

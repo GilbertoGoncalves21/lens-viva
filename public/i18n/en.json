@@ -71,7 +71,23 @@
     "readingHint": "Swipe sideways to read long lines. Tap the text to see the original.",
     "onlineMode": "Online · text sent to server",
     "onlineUncertain": "The text is uncertain. Move closer or freeze a clearer image.",
-    "onlineUnavailable": "Online translation unavailable. Check the server and connection."
+    "onlineUnavailable": "Online translation unavailable. Check the server and connection.",
+    "eyebrow": "Your visual translator",
+    "headline": "Point. Read. Understand.",
+    "exploreDemo": "Explore",
+    "sessionStatus": "Camera status",
+    "stateFrozen": "Image frozen",
+    "stateLive": "Live",
+    "modeOnline": "Online translation",
+    "modeOnDevice": "On device",
+    "modeOffline": "No connection",
+    "translationFailedTitle": "Some text could not be translated",
+    "translationFailedMessage": "Check the languages and try again. You can keep the image frozen.",
+    "translating": "Translating text…",
+    "translationsReady": "{{count}} translations ready",
+    "captureHint": "Frame the text and hold the camera steady",
+    "freezeHint": "Freeze to read at your own pace and inspect the original.",
+    "alreadyInTarget": "The text is already in {{language}}"
   },
   "languages": {
     "title": "Languages",
@@ -112,7 +128,8 @@
     "translatingInto": "Translating into {{language}}",
     "changeAppLanguage": "Change app language",
     "target": "Translate into",
-    "onlineReady": "Online: contextual sentences, no required packs."
+    "onlineReady": "Online: contextual sentences, no required packs.",
+    "autoShort": "Automatic"
   },
   "settings": {
     "title": "Settings",
@@ -222,5 +239,22 @@
   "splash": {
     "loading": "Loading Lens Viva…",
     "tagline": "See the world without barriers"
+  },
+  "demo": {
+    "title": "Explore Lens Viva",
+    "badge": "Interactive demo",
+    "headline": "A new way to read.",
+    "description": "Explore prepared examples, without a camera or setup.",
+    "chooseScene": "Choose an example",
+    "phrase": "Phrase",
+    "menu": "Menu",
+    "paragraph": "Long text",
+    "previewLabel": "Preview with sample translations",
+    "sampleResults": "Illustrative results",
+    "showOriginal": "Compare with the original",
+    "showTranslation": "Show translation",
+    "openCamera": "Use my camera",
+    "note": "Simulated examples. This screen does not run OCR or translation requests.",
+    "languagePair": "English → Portuguese"
   }
 }

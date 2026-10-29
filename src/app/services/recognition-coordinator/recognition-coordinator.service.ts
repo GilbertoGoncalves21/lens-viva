@@ -122,6 +122,19 @@ export class RecognitionCoordinatorService {
         }
     }
 
+    retryFailedTranslations(): void {
+        const languagePair: LanguagePair | null = this._languagePair;
+        const sourceLanguage: string | null = this.autoDetecting ? this.settledSceneLanguage() : languagePair?.sourceLanguage ?? null;
+
+        if (!languagePair || sourceLanguage === null) {
+            return;
+        }
+
+        // Preserve the frozen frame and successful regions. A new text version rejects late results.
+        const pending: OverlayItem[] = this.overlayStoreService.retryFailedTranslations();
+        this.dispatch(pending, sourceLanguage);
+    }
+
     setManualSourceLanguage(language: string): void {
         this.loggerService.debug('manual-source-language-selected', { language: language });
 

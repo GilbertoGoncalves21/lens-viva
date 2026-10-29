@@ -73,6 +73,7 @@ interface PreferencesServiceStub {
 }
 
 interface RecognitionCoordinatorServiceStub {
+    retryFailedTranslations: Mock<() => void>;
     setManualSourceLanguage: Mock<(language: string) => void>;
     setSuspended: Mock<(suspended: boolean) => void>;
     start: Mock<(languagePair: LanguagePair) => void>;
@@ -162,7 +163,7 @@ describe('SessionControllerService', () => {
         };
         loggerServiceStub = { error: vi.fn(), warn: vi.fn() };
         preferencesServiceStub = { settings: createSettings() };
-        recognitionCoordinatorServiceStub = { setManualSourceLanguage: vi.fn(), setSuspended: vi.fn(), start: vi.fn(), stop: vi.fn() };
+        recognitionCoordinatorServiceStub = { retryFailedTranslations: vi.fn(), setManualSourceLanguage: vi.fn(), setSuspended: vi.fn(), start: vi.fn(), stop: vi.fn() };
 
         TestBed.configureTestingModule({
             providers: [
@@ -186,6 +187,16 @@ describe('SessionControllerService', () => {
     async function startRunning(): Promise<void> {
         await expect(service.start()).resolves.toBe(SessionStatus.RUNNING);
     }
+
+    it('should accept translation recovery only in an active capture and preserve a frozen state', async () => {
+        service.retryFailedTranslations();
+        expect(recognitionCoordinatorServiceStub.retryFailedTranslations).not.toHaveBeenCalled();
+        await startRunning();
+        await service.freeze();
+        service.retryFailedTranslations();
+        expect(recognitionCoordinatorServiceStub.retryFailedTranslations).toHaveBeenCalledTimes(1);
+        expect(service.state.status).toBe(SessionStatus.FROZEN);
+    });
 
     it('should start idle with the configured language pair', () => {
         expect(service.state).toEqual({ languagePair: LANGUAGE_PAIR, missingLanguages: [], status: SessionStatus.IDLE });

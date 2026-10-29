@@ -231,6 +231,24 @@ describe('RecognitionCoordinatorService', () => {
         return overlayStoreService.items.length > 0 && overlayStoreService.items.every(predicate);
     }
 
+    it('should recover a failed translation on a frozen frame without a new recognition event', () => {
+        service.start(ENGLISH_TO_PORTUGUESE);
+        service.setSuspended(true);
+        recognition$.next(createFrozenEvent(1));
+        results$.next({ failed: true, regionId: 'region-1', textVersion: 1, translatedText: '' });
+        results$.next({ failed: false, regionId: 'region-2', textVersion: 1, translatedText: 'Bolo de chocolate' });
+        translationQueueServiceStub.enqueue.mockClear();
+
+        service.retryFailedTranslations();
+
+        expect(service.suspended).toBe(true);
+        expect(translationQueueServiceStub.enqueue).toHaveBeenCalledTimes(1);
+        expect(translationQueueServiceStub.enqueue).toHaveBeenCalledWith(expect.objectContaining({ regionId: 'region-1', textVersion: 2 }));
+        results$.next({ failed: false, regionId: 'region-1', textVersion: 2, translatedText: 'Pratos do dia' });
+        expect(findItem('region-1')?.translatedText).toBe('Pratos do dia');
+        expect(findItem('region-2')?.translatedText).toBe('Bolo de chocolate');
+    });
+
     it('should be idle and ignore events before starting', () => {
         service.handleRecognition(createEvent(1));
 

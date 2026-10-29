@@ -90,6 +90,37 @@ describe('TranslationQueueService', () => {
         return lensEngineServiceStub.translate.mock.calls.map((call: [string, LanguagePair]) => call[0]);
     }
 
+    it('should keep queued local work in its original provider and cache namespace after connectivity changes', async () => {
+        service.enqueue(createRequest('busy-1', 'First'));
+        service.enqueue(createRequest('busy-2', 'Second'));
+        service.enqueue(createRequest('queued', 'Third'));
+        onlineStub.available = true;
+        deferredTranslations[0].resolve('Primeiro');
+        await flushPromises();
+        expect(lensEngineServiceStub.translate).toHaveBeenCalledWith('Third', LANGUAGE_PAIR);
+        expect(onlineStub.translate).not.toHaveBeenCalled();
+        deferredTranslations[2].resolve('Terceiro');
+        await flushPromises();
+        service.enqueue(createRequest('new-online', 'Third'));
+        await flushPromises();
+        expect(onlineStub.translate).toHaveBeenCalledTimes(1);
+    });
+
+    it('should reject queued work when the online endpoint changes rather than send it to a different server', async () => {
+        onlineStub.available = true;
+        const busy = createDeferred<string>();
+        onlineStub.translate.mockImplementation(() => busy.promise);
+        service.enqueue(createRequest('busy-1', 'First'));
+        service.enqueue(createRequest('busy-2', 'Second'));
+        service.enqueue(createRequest('queued', 'Third'));
+        onlineStub.cacheIdentity = 'https://different.example/translate';
+        busy.resolve('Pronto');
+        await flushPromises();
+        expect(onlineStub.translate).toHaveBeenCalledTimes(2);
+        expect(results).toContainEqual(expect.objectContaining({ regionId: 'queued', failed: true }));
+        expect(service.activeCount).toBe(0);
+    });
+
     it('should prefer whole-sentence online translation over the local engine and glossary', async () => {
         onlineStub.available = true;
         const request = { ...createRequest('sentence', 'Everything happens for a reason.'), contextText: 'A motivational quote' };

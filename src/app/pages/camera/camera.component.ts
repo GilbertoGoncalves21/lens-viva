@@ -159,7 +159,7 @@ const STATUS_PANELS: Map<SessionStatus, StatusPanel> = new Map<SessionStatus, St
 @Component({
     selector: 'app-camera',
     templateUrl: './camera.component.html',
-    styleUrls: ['./camera.component.scss', './camera-surfaces.scss'],
+    styleUrls: ['./camera.component.scss', './camera-surfaces.scss', './camera-delivery.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false,
 })
@@ -324,6 +324,30 @@ export class CameraComponent implements OnDestroy, ViewDidEnter, ViewWillLeave {
 
     get frozen(): boolean {
         return this._state.status === SessionStatus.FROZEN;
+    }
+
+    get freezePending(): boolean {
+        return this._freezePending;
+    }
+
+    get translatedCount(): number {
+        return this._items.filter((item: OverlayItem) => item.status === OverlayStatus.TRANSLATED && item.sourceLanguage !== this.targetLanguage).length;
+    }
+
+    get textAlreadyInTargetLanguage(): boolean {
+        return this._items.some((item: OverlayItem) => item.status === OverlayStatus.TRANSLATED && item.sourceLanguage === this.targetLanguage);
+    }
+
+    get translating(): boolean {
+        return this._items.some((item: OverlayItem) => item.status === OverlayStatus.TRANSLATING);
+    }
+
+    get failedTranslations(): boolean {
+        return this._items.some((item: OverlayItem) => item.status === OverlayStatus.ERROR);
+    }
+
+    get processingModeKey(): string {
+        return this.onlineTranslationAvailable ? 'camera.modeOnline' : this._online ? 'camera.modeOnDevice' : 'camera.modeOffline';
     }
 
     get frozenNoticeId(): string {
@@ -497,6 +521,9 @@ export class CameraComponent implements OnDestroy, ViewDidEnter, ViewWillLeave {
     get onlineTranslationAvailable(): boolean { return this.onlineTranslationService.available; }
 
     get onlineNoticeKey(): string | null {
+        if (!this.onlineTranslationAvailable) {
+            return null;
+        }
         const notice = this.onlineTranslationService.notice();
         return notice === null ? null : notice === 'uncertain' ? 'camera.onlineUncertain' : 'camera.onlineUnavailable';
     }
@@ -682,6 +709,16 @@ export class CameraComponent implements OnDestroy, ViewDidEnter, ViewWillLeave {
                 this._freezePending = false;
                 this.refresh();
             });
+    }
+
+    retryTranslations(): void {
+        if (!this.failedTranslations) {
+            return;
+        }
+
+        this.onlineTranslationService.clearNotice();
+        this.sessionControllerService.retryFailedTranslations();
+        this.refresh();
     }
 
     toggleOriginal(regionId: string): void {

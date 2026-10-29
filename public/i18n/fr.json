@@ -71,7 +71,23 @@
     "readingHint": "Faites défiler horizontalement pour lire les lignes longues. Touchez le texte pour voir l’original.",
     "onlineMode": "En ligne · texte envoyé au serveur",
     "onlineUncertain": "Texte incertain. Rapprochez la caméra ou figez une image plus nette.",
-    "onlineUnavailable": "Traduction en ligne indisponible. Vérifiez le serveur et la connexion."
+    "onlineUnavailable": "Traduction en ligne indisponible. Vérifiez le serveur et la connexion.",
+    "eyebrow": "Votre traducteur visuel",
+    "headline": "Visez. Lisez. Comprenez.",
+    "exploreDemo": "Explorer",
+    "sessionStatus": "État de la caméra",
+    "stateFrozen": "Image figée",
+    "stateLive": "En direct",
+    "modeOnline": "Traduction en ligne",
+    "modeOnDevice": "Sur cet appareil",
+    "modeOffline": "Sans connexion",
+    "translationFailedTitle": "Une partie du texte n’a pas été traduite",
+    "translationFailedMessage": "Vérifiez les langues et réessayez. Vous pouvez garder l’image figée.",
+    "translating": "Traduction du texte…",
+    "translationsReady": "{{count}} traductions prêtes",
+    "captureHint": "Cadrez le texte et maintenez la caméra stable",
+    "freezeHint": "Figez l’image pour lire à votre rythme et consulter l’original.",
+    "alreadyInTarget": "Le texte est déjà en {{language}}"
   },
   "languages": {
     "title": "Langues",
@@ -112,7 +128,8 @@
     "translatingInto": "Langue de traduction : {{language}}",
     "changeAppLanguage": "Modifier la langue de l’application",
     "target": "Traduire en",
-    "onlineReady": "En ligne : phrases en contexte, sans packs obligatoires."
+    "onlineReady": "En ligne : phrases en contexte, sans packs obligatoires.",
+    "autoShort": "Automatique"
   },
   "settings": {
     "title": "Paramètres",
@@ -222,5 +239,22 @@
   "splash": {
     "loading": "Chargement de Lens Viva…",
     "tagline": "Voyez le monde sans barrières"
+  },
+  "demo": {
+    "title": "Explorer Lens Viva",
+    "badge": "Démo interactive",
+    "headline": "Une nouvelle façon de lire.",
+    "description": "Découvrez des exemples préparés, sans caméra ni configuration.",
+    "chooseScene": "Choisissez un exemple",
+    "phrase": "Phrase",
+    "menu": "Menu",
+    "paragraph": "Texte long",
+    "previewLabel": "Aperçu avec des exemples de traduction",
+    "sampleResults": "Résultats illustratifs",
+    "showOriginal": "Comparer avec l’original",
+    "showTranslation": "Afficher la traduction",
+    "openCamera": "Utiliser ma caméra",
+    "note": "Exemples simulés. Cet écran ne lance ni OCR ni requête de traduction.",
+    "languagePair": "Anglais → Portugais"
   }
 }
