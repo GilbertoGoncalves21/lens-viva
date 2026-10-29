@@ -187,6 +187,7 @@ Run these commands from the repository root:
 | `npm run build`             | Create a production web build in `dist/lens-viva/browser/` |
 | `npm run watch`             | Rebuild the web app in development mode                    |
 | `npm test -- --watch=false` | Run the application test suite once                        |
+| `npm run test:coverage`     | Run unit tests and generate text, HTML, and JSON coverage  |
 | `npm run server:test`       | Run server tests with a simulated provider                 |
 | `npm run server:start`      | Start the optional server using `server/.env`              |
 | `npm run android:sync`      | Build the web app and synchronize Android                  |

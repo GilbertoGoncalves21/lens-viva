@@ -44,6 +44,8 @@ npm run build
 
 Application tests use Angular's Vitest integration. Server tests use Node.js's built-in test runner and a simulated provider. They need no `.env` file or provider account and make no live Gemini calls.
 
+Run `npm run test:coverage` to collect application coverage with Vitest's V8 provider. Reports are written to `coverage/lens-viva/`, including an HTML report at `coverage/lens-viva/index.html` and a machine-readable `coverage-summary.json`. Coverage output is ignored by Git.
+
 The [CI workflow](../.github/workflows/ci.yml) runs those three checks after `npm ci` on pushes, pull requests, and manual dispatch. It uses the official [checkout](https://github.com/actions/checkout) and [setup-node](https://github.com/actions/setup-node) actions. Native tests and device verification are separate from this workflow.
 
 ## Android development
