@@ -20,6 +20,7 @@
         overflow: visible;
         padding: 1px 4px;
         transform-origin: 0 50%;
+        writing-mode: horizontal-tb;
         transition: left 150ms ease-out, top 150ms ease-out, transform 150ms ease-out, opacity 250ms ease-out;
 
         &:focus-visible {
@@ -29,6 +30,7 @@
     }
 
     .lens-balloon-text {
+        writing-mode: horizontal-tb;
         flex-shrink: 0;
         overflow-wrap: normal;
         white-space: nowrap;
@@ -66,6 +68,7 @@
     }
 
     .lens-reading-paragraph {
+        writing-mode: horizontal-tb;
         appearance: none;
         background: transparent;
         border: 0;

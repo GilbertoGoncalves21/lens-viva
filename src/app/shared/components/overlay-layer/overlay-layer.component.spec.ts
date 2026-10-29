@@ -711,8 +711,16 @@ describe('OverlayLayerComponent', () => {
         expect(component.balloonTransform(component.placementFor(item))).toBeNull();
     });
 
-    it('should turn a balloon over tilted text around its left centre and keep its left at the text start', () => {
-        const radians: number = (6 * Math.PI) / 180;
+    it.each([90, -90, 180])('should render horizontal readable text for a source angle of %s degrees', (orientation) => {
+        render([createItem({ orientation, translatedText: 'Tudo acontece por um motivo.' })]);
+        expect(balloons()[0].style.transform).toBe(EMPTY);
+        expect(placementOf('region-1').rotation).toBe(0);
+        expect(balloonText('region-1').textContent).toBe('Tudo acontece por um motivo.');
+        expectInsideFrame('region-1');
+    });
+
+    it('should keep a translation horizontal even when the source is tilted', () => {
+        const radians: number = 0;
 
         render([
             createItem({
@@ -724,13 +732,13 @@ describe('OverlayLayerComponent', () => {
             }),
         ]);
 
-        expect(balloons()[0].style.transform).toBe('rotate(6deg)');
+        expect(balloons()[0].style.transform).toBe(EMPTY);
         expect(componentStyles()).toMatch(/\.lens-balloon\[[^\]]+\]\{[^}]*transform-origin:050%/);
         expectPlacement('region-1', {
             fontSize: 16,
             left: 180 - 96 * Math.cos(radians),
             minHeight: lineCountHeight(1, 16),
-            rotation: 6,
+            rotation: 0,
             top: 225 - 96 * Math.sin(radians) - lineCountHeight(1, 16) / 2,
             width: 192,
         });
@@ -748,7 +756,7 @@ describe('OverlayLayerComponent', () => {
             }),
         ]);
 
-        expectPlacement('region-1', { fontSize: 16, rotation: 6, width: measuredWidth('Carne assada na brasa', 16) });
+        expectPlacement('region-1', { fontSize: 16, rotation: 0, width: measuredWidth('Carne assada na brasa', 16) });
         expect(extentOf('region-1').right).toBeCloseTo(FRAME_WIDTH_PIXELS - FRAME_MARGIN_PIXELS, PIXEL_PRECISION);
         expectInsideFrame('region-1');
     });
@@ -771,7 +779,7 @@ describe('OverlayLayerComponent', () => {
             }),
         ]);
 
-        expect(placementOf('region-1').rotation).toBe(-10);
+        expect(placementOf('region-1').rotation).toBe(0);
         expectInsideFrame('region-1');
     });
 
@@ -869,7 +877,7 @@ describe('OverlayLayerComponent', () => {
             createItem({ anchorRect: { height: 0.05, width: 0.2, x: 0.5, y: 0.5 }, originalText: 'Soup', regionId: 'price', translatedText: 'Sopa' }),
         ]);
 
-        expect(placementOf('tilted').rotation).toBe(5);
+        expect(placementOf('tilted').rotation).toBe(0);
         expect(extentOf('tilted').right).toBeLessThanOrEqual(extentOf('price').left - NEIGHBOR_GAP_PIXELS + 0.01);
         expectPlacement('price', { left: 200, top: 249.5, width: 80 });
         expectInsideFrame('tilted');

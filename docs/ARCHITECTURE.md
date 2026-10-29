@@ -40,7 +40,8 @@ Android includes separate recognizers for Latin, Japanese, Chinese, Korean, and 
 - Tracking matches text and geometry across frames, smooths movement, and expires stale regions.
 - Paragraph grouping joins nearby aligned blocks without terminal sentence punctuation. Distinct columns and unrelated text remain separate.
 - Menu detection uses multiple distinct known headings. In menu scenes, individual labels are preserved.
-- Online processing uses paragraph granularity and scene context. Live text must stabilize before a request is queued; frozen frames can be processed immediately.
+- All camera translation uses phrase/paragraph granularity, including legacy line-mode settings. Same-row OCR word fragments are assembled before filtering or menu detection.
+- Online processing includes scene context. Live text must stabilize before a request is queued; frozen frames can be processed immediately.
 
 The grouping, geometry, tracking, menu, and normalization policies are utilities under [`src/app/shared/utils/`](../src/app/shared/utils/), with colocated unit tests.
 
@@ -54,11 +55,13 @@ The Node.js server validates access and input before calling the Gemini adapter.
 
 [`LanguageModelService`](../src/app/services/language-model/language-model.service.ts) manages local model availability. Model checks are skipped when online translation is configured and the device reports a connection. Offline Android translation still requires the corresponding downloaded models.
 
+Before local English translation, `OcrCorrectionService` loads the bundled English spelling dictionary and repairs only a unique, one-edit candidate under bounded rules. It passes a complete phrase to the local translator and preserves the original OCR. Online translation retains provider-based interpretation. See [ADR 004](decisions/004-phrase-reconstruction-and-ocr-repair.md) for the boundaries.
+
 ## Rendering
 
 [`OverlayLayerComponent`](../src/app/shared/components/overlay-layer/overlay-layer.component.ts) converts normalized geometry into preview coordinates, fits single-line translations, and checks the width of rendered text. It uses a scrollable reading panel when balloons would overlap, become unreadable, or cover too much of the preview.
 
-Block translations use a compact rendered line height rather than covering the full original paragraph. Original OCR text remains available when the user opens a translation.
+Translated balloons use a horizontal baseline independently of the source angle. Block translations use a compact rendered line height rather than covering the full original paragraph. Original OCR text remains available when the user opens a translation.
 
 ## Storage and data boundaries
 

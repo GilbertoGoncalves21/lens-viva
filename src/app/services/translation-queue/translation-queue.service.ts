@@ -9,6 +9,7 @@ import { LoggerService } from '../logger/logger.service';
 import { TranslationCacheService } from '../translation-cache/translation-cache.service';
 import { OnlineTranslationService } from '../online-translation/online-translation.service';
 import { HashUtils } from 'src/app/shared/utils';
+import { OcrCorrectionService } from '../ocr-correction/ocr-correction.service';
 
 interface PendingTranslation {
     key: string;
@@ -31,6 +32,7 @@ export class TranslationQueueService {
         private loggerService: LoggerService,
         private translationCacheService: TranslationCacheService,
         private onlineTranslationService: OnlineTranslationService,
+        private ocrCorrectionService: OcrCorrectionService,
     ) {}
 
     get activeCount(): number {
@@ -124,12 +126,19 @@ export class TranslationQueueService {
             ? this.onlineTranslationService.translate(pending.request)
             : menuTranslation !== null
             ? Promise.resolve(menuTranslation)
-            : this.lensEngineService.translate(pending.request.text, pending.request.languagePair))
+            : this.localTranslation(pending.request))
             .finally((): void => this.release(pending.key, translation));
 
         this._inFlight.set(pending.key, translation);
 
         return translation;
+    }
+
+    private localTranslation(request: TranslationRequest): Promise<string> {
+        const input = this.ocrCorrectionService.correct(request.text, request.languagePair.sourceLanguage);
+        return typeof input === 'string'
+            ? this.lensEngineService.translate(input, request.languagePair)
+            : input.then(text => this.lensEngineService.translate(text, request.languagePair));
     }
 
     private async translate(pending: PendingTranslation, generation: number): Promise<TranslationResult> {

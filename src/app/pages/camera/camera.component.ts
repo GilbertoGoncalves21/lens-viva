@@ -355,7 +355,7 @@ export class CameraComponent implements OnDestroy, ViewDidEnter, ViewWillLeave {
     }
 
     get granularity(): RegionGranularity {
-        return this._settings.regionGranularity;
+        return RegionGranularity.BLOCK;
     }
 
     get hasText(): boolean {

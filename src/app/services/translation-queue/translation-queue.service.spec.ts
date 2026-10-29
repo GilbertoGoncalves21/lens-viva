@@ -1,4 +1,5 @@
 import { OnlineTranslationService } from '../online-translation/online-translation.service';
+import { OcrCorrectionService } from '../ocr-correction/ocr-correction.service';
 import { TestBed } from '@angular/core/testing';
 import { Subscription } from 'rxjs';
 import type { Mock } from 'vitest';
@@ -74,6 +75,7 @@ describe('TranslationQueueService', () => {
                 { provide: LensEngineService, useValue: lensEngineServiceStub },
                 { provide: LoggerService, useValue: loggerServiceStub },
                 { provide: OnlineTranslationService, useValue: onlineStub },
+                { provide: OcrCorrectionService, useValue: { correct: (text: string) => text } },
             ],
         });
         service = TestBed.inject(TranslationQueueService);

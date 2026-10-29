@@ -14,6 +14,7 @@ import {
 } from 'src/app/shared/models';
 import { AUTO_LANGUAGE, EXPIRY_TICK_MILLISECONDS, NormalizationUtils, TrackingUtils } from 'src/app/shared/utils';
 import { MenuTranslationUtils } from 'src/app/shared/utils/menu-translation-utils/menu-translation-utils';
+import { PhraseUtils } from 'src/app/shared/utils/phrase-utils/phrase-utils';
 import { HistoryService } from '../history/history.service';
 import { LanguageModelService } from '../language-model/language-model.service';
 import { LensEngineService } from '../lens-engine/lens-engine.service';
@@ -88,7 +89,7 @@ export class RecognitionCoordinatorService {
         this.logFirstRecognition(event);
 
         const menuContext: boolean = MenuTranslationUtils.isMenu([
-            ...event.blocks.flatMap((block) => block.lines.map((line) => line.text)),
+            ...PhraseUtils.rows(event.blocks).flatMap((block) => block.lines.map((line) => line.text)),
             ...this.readableTexts(),
         ]);
         if (menuContext !== this._menuContext) {
@@ -98,7 +99,7 @@ export class RecognitionCoordinatorService {
         }
 
         const previousRegionIds: string[] = frozenFrame ? this.regionIds() : [];
-        const granularity = this.onlineTranslationService.available ? RegionGranularity.BLOCK : this.preferencesService.settings.regionGranularity;
+        const granularity = RegionGranularity.BLOCK;
         const regions: TextRegion[] = NormalizationUtils.toTextRegions(event, granularity);
         const pending: OverlayItem[] = this.overlayStoreService.reconcile(regions, this.sessionTime(), !frozenFrame, frozenFrame);
 

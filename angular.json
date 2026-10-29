@@ -26,6 +26,12 @@
             "assets": [
               {
                 "glob": "**/*",
+                "input": "node_modules/dictionary-en",
+                "output": "dictionaries/en",
+                "ignore": ["*.js", "*.ts", "package.json", "readme.md"]
+              },
+              {
+                "glob": "**/*",
                 "input": "public"
               },
               {
@@ -48,6 +54,7 @@
               "src/styles.scss"
             ],
             "allowedCommonJsDependencies": [
+              "nspell",
               "regenerator-runtime",
               "sweetalert2",
               "tesseract.js"

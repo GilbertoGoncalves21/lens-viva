@@ -24,7 +24,7 @@ Lens Viva is a camera translation app built with Angular, Ionic, and Capacitor. 
 
 Android uses a custom Kotlin camera engine with Google ML Kit for on-device recognition and offline translation. The browser implementation uses Tesseract.js for recognition and the browser's Translator API when available. An optional Node.js server adds Gemini translation using complete phrases and scene context.
 
-**Project status:** version **0.2.0**, in active development. Android is the native platform included in this repository; browser support depends on available camera and translation APIs. Online translation requires your own server configuration and provider credentials.
+**Project status:** version **0.2.1**, in active development. Android is the native platform included in this repository; browser support depends on available camera and translation APIs. Online translation requires your own server configuration and provider credentials.
 
 ## Features
 
@@ -33,6 +33,7 @@ Try the interactive examples at **http://localhost:4200/demo** after starting th
 - **Live camera translation:** tracked text regions keep overlays aligned as the scene changes.
 - **Readable overlays:** translations stay on a single line without splitting words. Dense scenes switch to a scrollable reading panel.
 - **Phrase-aware processing:** nearby, aligned OCR lines are grouped into paragraphs to preserve meaning while keeping separate columns apart.
+- **Local English OCR repair:** a bundled spelling dictionary repairs uniquely recoverable letter errors before local translation, while preserving the original OCR for inspection. Ambiguous words remain unchanged.
 - **Contextual online translation:** the optional Gemini server receives the requested text and scene context and can flag ambiguous OCR instead of returning a guessed translation.
 - **Offline Android translation:** downloadable ML Kit language models support use without a connection after setup.
 - **Multiscript recognition:** Latin, Japanese, Chinese, Korean, and Devanagari recognizers are included in the Android app.
@@ -161,8 +162,10 @@ The source of truth is [`constants.ts`](src/app/shared/utils/constants/constants
 
 1. The platform engine captures camera frames and recognizes text locally.
 2. The recognition coordinator filters noise, tracks regions, and groups related lines.
+   It also joins adjacent words reported as separate OCR blocks. Translation always uses phrase/paragraph grouping, including installations with an older line-mode preference.
 3. The translation queue checks its cache and selects online translation or the platform's local translator.
 4. The overlay layer fits readable text to the preview, switching to a reading panel when needed.
+   Translations stay horizontal even when the source is rotated.
 5. Preferences and optional history are stored locally through Capacitor Preferences.
 
 See [Architecture](docs/ARCHITECTURE.md) for the data flow and the main extension points.

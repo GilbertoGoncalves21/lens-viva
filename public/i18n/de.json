@@ -175,7 +175,8 @@
     "onlineToken": "Zugriffstoken der App",
     "onlineSave": "Konfiguration speichern",
     "onlineInvalid": "Gültige HTTPS-Adresse und App-Token eingeben.",
-    "onlineSaved": "Konfiguration gespeichert."
+    "onlineSaved": "Konfiguration gespeichert.",
+    "phraseReadingHelp": "Wir übersetzen vollständige Sätze, um den Sinn zu erhalten. Tippe auf eine Übersetzung, um das Original zu sehen."
   },
   "history": {
     "title": "Verlauf",

@@ -175,7 +175,8 @@
     "onlineToken": "Token de acesso do app",
     "onlineSave": "Salvar configuração",
     "onlineInvalid": "Informe um endereço HTTPS válido e o token do app.",
-    "onlineSaved": "Configuração online salva."
+    "onlineSaved": "Configuração online salva.",
+    "phraseReadingHelp": "Traduzimos frases completas para preservar o sentido. Toque na tradução para consultar o texto original."
   },
   "history": {
     "title": "Histórico",

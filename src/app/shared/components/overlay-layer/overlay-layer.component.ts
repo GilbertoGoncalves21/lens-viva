@@ -158,8 +158,6 @@ const READING_ROW_TOLERANCE: number = 0.02;
 
 const REGION_ID_ATTRIBUTE: string = 'data-region-id';
 
-const ROTATION_THRESHOLD_DEGREES: number = 1.5;
-
 const ROW_OVERLAP_RATIO: number = 0.4;
 
 const SHOW_ORIGINAL_HINT_ID: string = 'lens-balloon-show-original';
@@ -470,7 +468,8 @@ export class OverlayLayerComponent implements OnDestroy, OnInit {
     }
 
     private geometryOf(item: OverlayItem, hostSize: ViewportSize): BalloonGeometry {
-        const rotation: number = Math.abs(item.orientation) < ROTATION_THRESHOLD_DEGREES ? 0 : item.orientation;
+        // OCR orientation describes the source, not the reading direction of the translation.
+        const rotation: number = 0;
         const radians: number = (rotation * Math.PI) / HALF_TURN_DEGREES;
         const cosine: number = Math.cos(radians);
         const sine: number = Math.sin(radians);

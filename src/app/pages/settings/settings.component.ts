@@ -9,7 +9,7 @@ import { LoggerService } from 'src/app/services/logger/logger.service';
 import { PreferencesService } from 'src/app/services/preferences/preferences.service';
 import { SessionControllerService } from 'src/app/services/session-controller/session-controller.service';
 import { TranslationCacheService } from 'src/app/services/translation-cache/translation-cache.service';
-import { AppSettings, RegionGranularity } from 'src/app/shared/models';
+import { AppSettings } from 'src/app/shared/models';
 import {
     AUTO_LANGUAGE
 ,   GeometryUtils
@@ -39,17 +39,11 @@ const RANGE_PERSIST_DEBOUNCE_MILLISECONDS: number = 300;
 
 const TERMS_ROUTE: string = '/terms';
 
-interface GranularityOption {
-    labelKey: string;
-    value: RegionGranularity;
-}
-
 interface SettingsForm {
     analysesPerSecond: FormControl<number>;
     appLanguage: FormControl<string>;
     balloonFontPercent: FormControl<number>;
     historyEnabled: FormControl<boolean>;
-    regionGranularity: FormControl<RegionGranularity>;
     requireWifiForDownloads: FormControl<boolean>;
     showDebugRegions: FormControl<boolean>;
 }
@@ -68,10 +62,6 @@ export class SettingsComponent implements OnDestroy, OnInit {
     private _appVersion: string = environment.appVersion;
     private _deviceLanguageName: string;
     private _form: FormGroup<SettingsForm>;
-    private _granularityOptions: GranularityOption[] = [
-        { labelKey: 'settings.granularityBlock', value: RegionGranularity.BLOCK },
-        { labelKey: 'settings.granularityLine', value: RegionGranularity.LINE },
-    ];
     private _subscriptions: Subscription[] = [];
 
     constructor(
@@ -98,7 +88,6 @@ export class SettingsComponent implements OnDestroy, OnInit {
             appLanguage: this.formBuilder.nonNullable.control<string>(settings.appLanguage),
             balloonFontPercent: this.formBuilder.nonNullable.control<number>(this.toBalloonFontPercent(settings.balloonFontScale)),
             historyEnabled: this.formBuilder.nonNullable.control<boolean>(settings.historyEnabled),
-            regionGranularity: this.formBuilder.nonNullable.control<RegionGranularity>(settings.regionGranularity),
             requireWifiForDownloads: this.formBuilder.nonNullable.control<boolean>(settings.requireWifiForDownloads),
             showDebugRegions: this.formBuilder.nonNullable.control<boolean>(settings.showDebugRegions),
         });
@@ -159,10 +148,6 @@ export class SettingsComponent implements OnDestroy, OnInit {
         return this._form;
     }
 
-    get granularityOptions(): GranularityOption[] {
-        return this._granularityOptions;
-    }
-
     get maxAnalysesPerSecond(): number {
         return MAX_ANALYSES_PER_SECOND;
     }
@@ -199,9 +184,6 @@ export class SettingsComponent implements OnDestroy, OnInit {
                 }),
             controls.historyEnabled.valueChanges.subscribe((historyEnabled: boolean) => {
                 this.changeHistoryEnabled(historyEnabled);
-            }),
-            controls.regionGranularity.valueChanges.subscribe((regionGranularity: RegionGranularity) => {
-                this.persist({ regionGranularity: regionGranularity });
             }),
             controls.requireWifiForDownloads.valueChanges.subscribe((requireWifiForDownloads: boolean) => {
                 this.persist({ requireWifiForDownloads: requireWifiForDownloads });
@@ -261,10 +243,6 @@ export class SettingsComponent implements OnDestroy, OnInit {
 
     async openTerms(): Promise<void> {
         await this.router.navigateByUrl(TERMS_ROUTE);
-    }
-
-    trackByGranularity(index: number, option: GranularityOption): RegionGranularity {
-        return option.value;
     }
 
     trackByLanguage(index: number, language: string): string {
@@ -362,7 +340,6 @@ export class SettingsComponent implements OnDestroy, OnInit {
                 appLanguage: settings.appLanguage,
                 balloonFontPercent: this.toBalloonFontPercent(settings.balloonFontScale),
                 historyEnabled: settings.historyEnabled,
-                regionGranularity: settings.regionGranularity,
                 requireWifiForDownloads: settings.requireWifiForDownloads,
                 showDebugRegions: settings.showDebugRegions,
             },

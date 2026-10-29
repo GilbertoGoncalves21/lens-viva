@@ -37,3 +37,5 @@ An uncertainty flag is a model response, not proof of correctness. Latency, prov
 Phrase and normalization tests cover multiline sentences, separate columns, and menu handling. Coordinator tests verify complete-text requests and skipping model checks online. Server adapter tests validate the request and response contract with simulated provider responses.
 
 These tests do not establish live Gemini accuracy, device OCR quality, or offline model behavior on every Android version. See [Validation](../VALIDATION.md).
+
+The bounded English lexical repair added in 0.2.1 is specified in [ADR 004](004-phrase-reconstruction-and-ocr-repair.md). It does not introduce unrestricted fuzzy substitution or replace provider-based interpretation.

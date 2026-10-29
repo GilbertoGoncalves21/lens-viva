@@ -400,13 +400,13 @@ describe('RecognitionCoordinatorService', () => {
         expect(overlayStoreService.items.some((item: OverlayItem) => item.status === OverlayStatus.EXPIRING)).toBe(false);
     });
 
-    it('should use line regions when the line granularity is selected', () => {
+    it('should preserve whole phrases even when a legacy installation stored line granularity', () => {
         preferencesServiceStub.settings = createSettings(RegionGranularity.LINE);
         service.start(ENGLISH_TO_PORTUGUESE);
 
         recognition$.next(createEvent(1, [createBlock([createLine('Grilled chicken', 100), createLine('with lemon', 300)])]));
 
-        expect(overlayStoreService.items.map((item: OverlayItem) => item.originalText)).toEqual(['Grilled chicken', 'with lemon']);
+        expect(overlayStoreService.items.map((item: OverlayItem) => item.originalText)).toEqual(['Grilled chicken with lemon']);
     });
 
     it('should apply translation results to the overlay store', () => {

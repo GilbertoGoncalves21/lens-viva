@@ -78,13 +78,7 @@
                 <ion-item>
                     <section class="w-100 d-flex flex-column gap-2 py-3">
                         <p id="settings-granularity-label" class="m-0">{{ 'settings.granularity' | translate }}</p>
-                        <ion-segment formControlName="regionGranularity" aria-labelledby="settings-granularity-label">
-                            @for (option of granularityOptions; track trackByGranularity($index, option)) {
-                                <ion-segment-button [value]="option.value">
-                                    <ion-label>{{ option.labelKey | translate }}</ion-label>
-                                </ion-segment-button>
-                            }
-                        </ion-segment>
+                        <p class="m-0"><ion-text color="medium">{{ 'settings.phraseReadingHelp' | translate }}</ion-text></p>
                     </section>
                 </ion-item>
                 <ion-item>

@@ -175,7 +175,8 @@
     "onlineToken": "Jeton d’accès de l’app",
     "onlineSave": "Enregistrer",
     "onlineInvalid": "Saisissez une adresse HTTPS valide et le jeton de l’app.",
-    "onlineSaved": "Configuration enregistrée."
+    "onlineSaved": "Configuration enregistrée.",
+    "phraseReadingHelp": "Nous traduisons des phrases complètes pour préserver le sens. Touchez une traduction pour consulter l’original."
   },
   "history": {
     "title": "Historique",

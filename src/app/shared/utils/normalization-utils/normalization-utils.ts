@@ -46,6 +46,7 @@ export class NormalizationUtils {
     }
 
     static toTextRegions(event: RecognitionEvent, granularity: RegionGranularity): TextRegion[] {
+        event = { ...event, blocks: PhraseUtils.rows(event.blocks) };
         const menu: boolean = MenuTranslationUtils.isMenu(event.blocks.flatMap((block: RecognizedBlock) => block.lines.map((line: RecognizedLine) => line.text)));
         const candidates: TextRegion[] = granularity === RegionGranularity.LINE || menu
             ? NormalizationUtils.fromLines(event)

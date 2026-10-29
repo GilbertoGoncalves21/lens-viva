@@ -207,7 +207,7 @@ describe('SettingsComponent', () => {
 
         expect(component.form.controls.appLanguage.value).toBe(AUTO_LANGUAGE);
         expect(component.form.controls.balloonFontPercent.value).toBe(100);
-        expect(component.form.controls.regionGranularity.value).toBe(RegionGranularity.BLOCK);
+        expect(component.form.contains('regionGranularity')).toBe(false);
         expect(component.deviceLanguageName).toBe('português');
     });
 
@@ -221,18 +221,15 @@ describe('SettingsComponent', () => {
         expect(preferencesService.update).not.toHaveBeenCalled();
     });
 
-    it('should persist toggle and segment changes', async () => {
+    it('should persist reading and download toggle changes', async () => {
         createComponent();
 
         component.form.controls.showDebugRegions.setValue(true);
         component.form.controls.requireWifiForDownloads.setValue(true);
-        component.form.controls.regionGranularity.setValue(RegionGranularity.LINE);
         await flushPromises();
 
         expect(preferencesService.update).toHaveBeenCalledWith({ showDebugRegions: true });
         expect(preferencesService.update).toHaveBeenCalledWith({ requireWifiForDownloads: true });
-        expect(preferencesService.update).toHaveBeenCalledWith({ regionGranularity: RegionGranularity.LINE });
-        expect(preferencesService.settings.regionGranularity).toBe(RegionGranularity.LINE);
     });
 
     it('should persist the analysis rate after the range settles and apply it to the session', async () => {

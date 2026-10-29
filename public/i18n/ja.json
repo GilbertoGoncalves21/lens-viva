@@ -175,7 +175,8 @@
     "onlineToken": "アプリのアクセストークン",
     "onlineSave": "設定を保存",
     "onlineInvalid": "有効なHTTPSアドレスとアプリのトークンを入力してください。",
-    "onlineSaved": "オンライン設定を保存しました。"
+    "onlineSaved": "オンライン設定を保存しました。",
+    "phraseReadingHelp": "文全体を翻訳して意味を保ちます。翻訳をタップすると原文を確認できます。"
   },
   "history": {
     "title": "履歴",

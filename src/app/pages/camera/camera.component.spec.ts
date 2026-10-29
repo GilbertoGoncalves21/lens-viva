@@ -1878,7 +1878,7 @@ describe('CameraComponent', () => {
 
         settings$.next({ ...createSettings(), regionGranularity: RegionGranularity.LINE });
 
-        expect(overlay.properties['granularity']).toBe(RegionGranularity.LINE);
+        expect(overlay.properties['granularity']).toBe(RegionGranularity.BLOCK);
 
         overlay.triggerEventHandler('balloonToggled', 'region-1');
 

@@ -2,6 +2,12 @@
 
 Unit coverage measures exercised code, not translation accuracy or camera reliability. Use this guide to keep automated evidence separate from real-device and provider checks.
 
+## Local verification record: 0.2.1
+
+Recorded on **2026-10-29**: **1,434 tests passed across 44 files**. V8 coverage: **97.73% lines**, 97.34% statements, 93.52% branches, and 96.57% functions. Production web build, Capacitor sync, and Android debug assembly passed. Dictionary affix, word-list, and license assets were verified in both web and native output.
+
+New regressions cover horizontal translations for rotated OCR, fragmented words assembled into one phrase, missing-letter repair including `Everyhing`, and preserving original OCR. The integrated offline flow asserts one corrected whole-phrase translation call even with a legacy line preference. Translator output remains simulated. Physical-device and live-provider acceptance remain pending.
+
 ## Local verification record: 0.2.0
 
 Recorded on **2026-10-29**:

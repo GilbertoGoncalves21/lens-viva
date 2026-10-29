@@ -2,7 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Subject } from 'rxjs';
-import { OverlayStatus, RecognitionEvent } from 'src/app/shared/models';
+import { OverlayStatus, RecognitionEvent, RegionGranularity } from 'src/app/shared/models';
 import { HistoryService } from '../history/history.service';
 import { LanguageModelService } from '../language-model/language-model.service';
 import { LensEngineService } from '../lens-engine/lens-engine.service';
@@ -50,6 +50,91 @@ function frozenPhrase(): RecognitionEvent {
 }
 
 describe('Frozen translation flow with real coordinator, queue, cache, store, and HTTP client', () => {
+    it('should join fragmented OCR and repair a missing letter before one whole-phrase local translation', async () => {
+        const recognition = new Subject<RecognitionEvent>();
+        const localTranslate = vi.fn(async () => 'Tudo acontece por um motivo.');
+        const settings = {
+            ...PreferencesService.defaultSettings({ sourceLanguage: 'en', targetLanguage: 'pt' }),
+            regionGranularity: RegionGranularity.LINE,
+        };
+        TestBed.configureTestingModule({
+            providers: [
+                provideHttpClient(),
+                provideHttpClientTesting(),
+                { provide: PreferencesService, useValue: { settings } },
+                {
+                    provide: LensEngineService,
+                    useValue: {
+                        recognition: () => recognition.asObservable(),
+                        translate: localTranslate,
+                    },
+                },
+                { provide: HistoryService, useValue: { record: vi.fn() } },
+                { provide: LanguageModelService, useValue: { isDownloaded: () => true } },
+                { provide: LoggerService, useValue: { debug: vi.fn(), error: vi.fn() } },
+                {
+                    provide: SceneLanguageService,
+                    useValue: { setFixedLanguage: vi.fn(), reset: vi.fn(), contested: false },
+                },
+            ],
+        });
+        const coordinator = TestBed.inject(RecognitionCoordinatorService);
+        const store = TestBed.inject(OverlayStoreService);
+        const http = TestBed.inject(HttpTestingController);
+        const fragment = (text: string, left: number, right: number, top = 200) => {
+            const boundingBox = { left, right, top, bottom: top + 50 };
+            return {
+                text,
+                boundingBox,
+                recognizedLanguage: 'en',
+                orientedWidth: right - left,
+                orientedHeight: 50,
+                lines: [
+                    {
+                        text,
+                        boundingBox,
+                        recognizedLanguage: 'en',
+                        angle: 0,
+                        confidence: 0.95,
+                        orientedWidth: right - left,
+                        orientedHeight: 50,
+                    },
+                ],
+            };
+        };
+        try {
+            coordinator.start({ sourceLanguage: 'en', targetLanguage: 'pt' });
+            coordinator.setSuspended(true);
+            recognition.next({
+                ...frozenPhrase(),
+                blocks: [
+                    fragment('Everyhing', 100, 300),
+                    fragment('happens', 310, 470),
+                    fragment('for', 480, 550),
+                    fragment('a reason.', 200, 480, 260),
+                ],
+            });
+            http.expectOne((request) => request.url.endsWith('/dictionaries/en/index.aff')).flush(
+                'SET UTF-8\n',
+            );
+            http.expectOne((request) => request.url.endsWith('/dictionaries/en/index.dic')).flush(
+                '5\neverything\nhappens\nfor\na\nreason\n',
+            );
+            await vi.waitFor(() => expect(store.items[0]?.status).toBe(OverlayStatus.TRANSLATED));
+            expect(localTranslate).toHaveBeenCalledExactlyOnceWith(
+                'Everything happens for a reason.',
+                { sourceLanguage: 'en', targetLanguage: 'pt' },
+            );
+            expect(store.items).toHaveLength(1);
+            expect(store.items[0].originalText).toBe('Everyhing happens for a reason.');
+            expect(store.items[0].translatedText).toBe('Tudo acontece por um motivo.');
+            expect(coordinator.suspended).toBe(true);
+        } finally {
+            coordinator.stop();
+            http.verify();
+        }
+    });
+
     it('should recover a complete phrase after an HTTP failure without another frame or an offline call', async () => {
         const recognition = new Subject<RecognitionEvent>();
         const localTranslate = vi.fn();
