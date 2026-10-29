@@ -1,0 +1,21 @@
+package com.oaxis.lensviva
+
+object LensEngineErrorCode {
+    const val CAMERA_ERROR: String = "CAMERA_ERROR"
+    const val CAMERA_NOT_STARTED: String = "CAMERA_NOT_STARTED"
+    const val CAMERA_SELECTION_UNSUPPORTED: String = "CAMERA_SELECTION_UNSUPPORTED"
+    const val CAMERA_START_CANCELLED: String = "CAMERA_START_CANCELLED"
+    const val CAMERA_UNAVAILABLE: String = "CAMERA_UNAVAILABLE"
+    const val FREEZE_FAILED: String = "FREEZE_FAILED"
+    const val INVALID_ARGUMENT: String = "INVALID_ARGUMENT"
+    const val LANGUAGE_ID_FAILED: String = "LANGUAGE_ID_FAILED"
+    const val MODEL_DELETE_FAILED: String = "MODEL_DELETE_FAILED"
+    const val MODEL_DOWNLOAD_FAILED: String = "MODEL_DOWNLOAD_FAILED"
+    const val MODEL_MISSING: String = "MODEL_MISSING"
+    const val MODEL_QUERY_FAILED: String = "MODEL_QUERY_FAILED"
+    const val OCR_FAILED: String = "OCR_FAILED"
+    const val PERMISSION_DENIED: String = "PERMISSION_DENIED"
+    const val SETTINGS_UNAVAILABLE: String = "SETTINGS_UNAVAILABLE"
+    const val TRANSLATION_FAILED: String = "TRANSLATION_FAILED"
+    const val UNSUPPORTED_LANGUAGE: String = "UNSUPPORTED_LANGUAGE"
+}

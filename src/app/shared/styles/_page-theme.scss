@@ -1,0 +1,110 @@
+.lens-font-brand {
+    font-family: var(--lens-font-brand);
+}
+
+.lens-brand-accent {
+    color: var(--lens-indigo-text);
+}
+
+.lens-page {
+    margin-inline: auto;
+    max-width: 720px;
+    width: 100%;
+}
+
+ion-list.lens-card {
+    background: var(--lens-surface-2);
+    border: 1px solid var(--lens-border-subtle);
+    border-radius: var(--lens-radius-lg);
+    box-shadow: var(--lens-shadow-card);
+    margin: 0;
+    overflow: hidden;
+    padding-block: 4px;
+    transform: translateZ(0);
+
+    ion-item {
+        --background: transparent;
+    }
+
+    ion-item:last-of-type {
+        --border-width: 0;
+        --inner-border-width: 0;
+    }
+}
+
+.lens-icon-badge {
+    align-items: center;
+    background: rgba(var(--lens-badge-rgb, 129, 140, 248), 0.16);
+    border-radius: 50%;
+    box-sizing: content-box;
+    color: var(--lens-badge-color, var(--lens-indigo-soft));
+    display: inline-flex;
+    flex-shrink: 0;
+    height: 20px;
+    justify-content: center;
+    padding: 8px;
+    width: 20px;
+}
+
+ion-icon.lens-icon-badge {
+    font-size: 20px;
+}
+
+span.lens-icon-badge {
+    font-family: var(--lens-font-brand);
+    font-size: 0.8125rem;
+    font-weight: 800;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+ion-item .lens-icon-badge[slot='start'] {
+    margin-block: 8px;
+    margin-inline: 0 16px;
+}
+
+.lens-icon-badge-danger {
+    --lens-badge-color: var(--lens-danger-text);
+    --lens-badge-rgb: 248, 113, 113;
+}
+
+.lens-icon-badge-neutral {
+    --lens-badge-color: var(--lens-text-body);
+    --lens-badge-rgb: 148, 163, 184;
+}
+
+.lens-callout {
+    background: rgba(var(--lens-callout-rgb, 129, 140, 248), 0.1);
+    border: 1px solid rgba(var(--lens-callout-rgb, 129, 140, 248), 0.26);
+    border-radius: var(--lens-radius-md);
+    color: var(--lens-text-body);
+    font-size: 0.875rem;
+    line-height: 1.5;
+
+    ion-icon {
+        color: var(--lens-callout-icon, var(--lens-indigo-text));
+        flex-shrink: 0;
+        font-size: 1.125rem;
+        margin-top: 1px;
+    }
+}
+
+.lens-callout-amber {
+    --lens-callout-icon: var(--lens-amber-text);
+    --lens-callout-rgb: 245, 158, 11;
+}
+
+.lens-callout-neutral {
+    --lens-callout-icon: var(--lens-text-secondary);
+    --lens-callout-rgb: 148, 163, 184;
+}
+
+ion-button.button-solid.lens-button-tonal {
+    --background: rgba(129, 140, 248, 0.16);
+    --background-activated: rgba(129, 140, 248, 0.3);
+    --background-focused: var(--lens-indigo-soft);
+    --background-focused-opacity: 0.12;
+    --background-hover: var(--lens-indigo-soft);
+    --background-hover-opacity: 0.08;
+    --color: var(--lens-indigo-soft);
+}

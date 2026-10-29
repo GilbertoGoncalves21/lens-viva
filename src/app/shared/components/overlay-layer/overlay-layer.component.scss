@@ -1,0 +1,106 @@
+:host {
+    .lens-balloon {
+        -webkit-backdrop-filter: blur(2px);
+        -webkit-tap-highlight-color: transparent;
+        appearance: none;
+        backdrop-filter: blur(2px);
+        background: rgba(15, 23, 42, 0.92);
+        border: 0;
+        border-radius: 4px;
+        box-shadow: 0 1px 4px rgba(2, 6, 23, 0.45);
+        box-sizing: border-box;
+        color: var(--lens-balloon-color);
+        cursor: pointer;
+        font-family: inherit;
+        height: auto;
+        letter-spacing: normal;
+        line-height: 1.2;
+        -webkit-text-size-adjust: none;
+        text-size-adjust: none;
+        overflow: visible;
+        padding: 1px 4px;
+        transform-origin: 0 50%;
+        transition: left 150ms ease-out, top 150ms ease-out, transform 150ms ease-out, opacity 250ms ease-out;
+
+        &:focus-visible {
+            outline: 2px solid var(--lens-focus-ring);
+            outline-offset: 1px;
+        }
+    }
+
+    .lens-balloon-text {
+        flex-shrink: 0;
+        overflow-wrap: normal;
+        white-space: nowrap;
+        word-break: normal;
+    }
+
+    .lens-reading-panel {
+        background: rgba(11, 17, 32, 0.96);
+        border: 1px solid var(--lens-border-strong);
+        border-radius: 18px;
+        color: var(--lens-balloon-color);
+        display: flex;
+        flex-direction: column;
+        inset: 12px;
+        position: absolute;
+
+        header {
+            border-bottom: 1px solid var(--lens-border-strong);
+            display: grid;
+            flex-shrink: 0;
+            gap: 4px;
+            padding: 14px 16px;
+            strong { color: var(--lens-indigo-soft); font-size: 0.9rem; }
+            span { color: var(--lens-text-secondary); font-size: 0.7rem; line-height: 1.4; }
+        }
+    }
+
+    .lens-reading-content {
+        min-height: 0;
+        overflow: auto;
+        overscroll-behavior: contain;
+        padding: 4px 16px;
+        scrollbar-width: thin;
+    }
+
+    .lens-reading-paragraph {
+        appearance: none;
+        background: transparent;
+        border: 0;
+        border-bottom: 1px solid var(--lens-border-subtle);
+        color: inherit;
+        cursor: pointer;
+        display: block;
+        font: inherit;
+        font-size: 1em;
+        line-height: 1.55;
+        overflow-wrap: normal;
+        white-space: nowrap;
+        -webkit-text-size-adjust: none;
+        text-size-adjust: none;
+        padding: 12px 0;
+        text-align: start;
+        min-width: 100%;
+        width: max-content;
+    }
+
+    .lens-balloon-original {
+        box-shadow: inset 0 -2px 0 var(--lens-amber), 0 1px 4px rgba(2, 6, 23, 0.45);
+    }
+
+    .lens-debug-region {
+        border: 2px dashed var(--lens-debug-outline, #f59e0b);
+        box-sizing: border-box;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :host .lens-balloon {
+        transition: none;
+    }
+}
+
+:host:has(.lens-balloon:focus-visible) {
+    z-index: 1 !important;
+}

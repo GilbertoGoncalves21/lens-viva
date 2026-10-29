@@ -1,0 +1,171 @@
+<app-layout backHref="/camera" [title]="'settings.title' | translate">
+    <form class="lens-page d-flex flex-column gap-4 px-3 pt-3 pb-5" [formGroup]="form">
+        <section class="d-flex flex-column gap-2" aria-labelledby="settings-language-title">
+            <h2 id="settings-language-title" class="lens-font-brand fs-6 fw-bold text-body-secondary m-0 px-2">{{ 'settings.languageSection' | translate }}</h2>
+            <ion-list class="lens-card">
+                <ion-item>
+                    <ion-icon slot="start" class="lens-icon-badge" name="language-outline" aria-hidden="true"></ion-icon>
+                    <section class="lens-language-field">
+                        <label for="app-language">{{ 'settings.appLanguage' | translate }}</label>
+                        <select id="app-language" formControlName="appLanguage" aria-describedby="app-language-help">
+                        <option [value]="autoLanguage">
+                            {{ 'settings.appLanguageAuto' | translate: { language: deviceLanguageName } }}
+                        </option>
+                        @for (language of appLanguages; track trackByLanguage($index, language)) {
+                            <option [value]="language" [attr.lang]="language">{{ language | languageName: language }}</option>
+                        }
+                        </select>
+                        <p id="app-language-help">{{ 'settings.appLanguageHelp' | translate }}</p>
+                    </section>
+                </ion-item>
+            </ion-list>
+        </section>
+
+        <section class="d-flex flex-column gap-2" aria-labelledby="online-translation-title">
+            <h2 id="online-translation-title" class="lens-font-brand fs-6 fw-bold text-body-secondary m-0 px-2">{{ 'settings.onlineTitle' | translate }}</h2>
+            <section class="lens-card px-3 py-2">
+                <p class="mt-2 mb-1">{{ 'settings.onlineHelp' | translate }}</p>
+                <details>
+                    <summary class="py-2">{{ 'settings.onlineConfigure' | translate }}</summary>
+                    <section class="lens-language-field">
+                        <label for="online-url">{{ 'settings.onlineUrl' | translate }}</label>
+                        <input id="online-url" type="url" inputmode="url" autocomplete="off" [formControl]="onlineUrlControl" placeholder="https://api.example.com/translate" />
+                    </section>
+                    <section class="lens-language-field">
+                        <label for="online-token">{{ 'settings.onlineToken' | translate }}</label>
+                        <input id="online-token" type="password" autocomplete="off" [formControl]="onlineTokenControl" />
+                    </section>
+                    <ion-button expand="block" (click)="saveOnlineTranslation()">{{ 'settings.onlineSave' | translate }}</ion-button>
+                </details>
+            </section>
+        </section>
+
+        <section class="d-flex flex-column gap-2" aria-labelledby="settings-reading-title">
+            <h2 id="settings-reading-title" class="lens-font-brand fs-6 fw-bold text-body-secondary m-0 px-2">{{ 'settings.readingSection' | translate }}</h2>
+            <ion-list class="lens-card">
+                <ion-item>
+                    <section class="w-100 d-flex flex-column gap-1 py-2">
+                        <ion-range
+                            formControlName="analysesPerSecond"
+                            labelPlacement="stacked"
+                            [label]="'settings.analysesPerSecond' | translate: { value: analysesPerSecond }"
+                            [max]="maxAnalysesPerSecond"
+                            [min]="minAnalysesPerSecond"
+                            [snaps]="true"
+                            [step]="1"
+                            [ticks]="true"
+                        ></ion-range>
+                        <p class="mb-0">
+                            <small>
+                                <ion-text color="medium">{{ 'settings.analysesPerSecondHelp' | translate }}</ion-text>
+                            </small>
+                        </p>
+                    </section>
+                </ion-item>
+                <ion-item>
+                    <ion-range
+                        class="py-2"
+                        formControlName="balloonFontPercent"
+                        labelPlacement="stacked"
+                        [label]="'settings.balloonFontScale' | translate: { value: balloonFontPercent }"
+                        [max]="balloonFontPercentMax"
+                        [min]="balloonFontPercentMin"
+                        [snaps]="true"
+                        [step]="balloonFontPercentStep"
+                        [ticks]="true"
+                    ></ion-range>
+                </ion-item>
+                <ion-item>
+                    <section class="w-100 d-flex flex-column gap-2 py-3">
+                        <p id="settings-granularity-label" class="m-0">{{ 'settings.granularity' | translate }}</p>
+                        <ion-segment formControlName="regionGranularity" aria-labelledby="settings-granularity-label">
+                            @for (option of granularityOptions; track trackByGranularity($index, option)) {
+                                <ion-segment-button [value]="option.value">
+                                    <ion-label>{{ option.labelKey | translate }}</ion-label>
+                                </ion-segment-button>
+                            }
+                        </ion-segment>
+                    </section>
+                </ion-item>
+                <ion-item>
+                    <ion-toggle formControlName="showDebugRegions" justify="space-between">
+                        {{ 'settings.showDebugRegions' | translate }}
+                    </ion-toggle>
+                </ion-item>
+            </ion-list>
+        </section>
+
+        <section class="d-flex flex-column gap-2" aria-labelledby="settings-downloads-title">
+            <h2 id="settings-downloads-title" class="lens-font-brand fs-6 fw-bold text-body-secondary m-0 px-2">{{ 'settings.downloadsSection' | translate }}</h2>
+            <ion-list class="lens-card">
+                <ion-item>
+                    <ion-toggle formControlName="requireWifiForDownloads" justify="space-between">
+                        {{ 'settings.requireWifi' | translate }}
+                    </ion-toggle>
+                </ion-item>
+                <ion-item [button]="true" [detail]="true" (click)="openLanguages()">
+                    <ion-icon slot="start" class="lens-icon-badge" name="cloud-download-outline" aria-hidden="true"></ion-icon>
+                    <ion-label>{{ 'settings.manageLanguages' | translate }}</ion-label>
+                </ion-item>
+            </ion-list>
+        </section>
+
+        <section class="d-flex flex-column gap-2" aria-labelledby="settings-history-title">
+            <h2 id="settings-history-title" class="lens-font-brand fs-6 fw-bold text-body-secondary m-0 px-2">{{ 'settings.historySection' | translate }}</h2>
+            <ion-list class="lens-card">
+                <ion-item>
+                    <ion-toggle
+                        class="py-1"
+                        formControlName="historyEnabled"
+                        justify="space-between"
+                        [helperText]="'settings.historyHelp' | translate"
+                    >
+                        {{ 'settings.historyEnabled' | translate }}
+                    </ion-toggle>
+                </ion-item>
+                <ion-item [button]="true" [detail]="true" (click)="openHistory()">
+                    <ion-icon slot="start" class="lens-icon-badge" name="time-outline" aria-hidden="true"></ion-icon>
+                    <ion-label>{{ 'settings.viewHistory' | translate }}</ion-label>
+                </ion-item>
+            </ion-list>
+        </section>
+
+        <section class="d-flex flex-column gap-2" aria-labelledby="settings-privacy-title">
+            <h2 id="settings-privacy-title" class="lens-font-brand fs-6 fw-bold text-body-secondary m-0 px-2">{{ 'settings.privacySection' | translate }}</h2>
+            <ion-list class="lens-card">
+                <ion-item>
+                    <ion-icon slot="start" class="lens-icon-badge" name="shield-checkmark-outline" aria-hidden="true"></ion-icon>
+                    <ion-label class="ion-text-wrap py-2">
+                        <p class="m-0">{{ 'settings.privacyText' | translate }}</p>
+                    </ion-label>
+                </ion-item>
+                <ion-item [button]="true" [detail]="false" (click)="clearCache()">
+                    <ion-icon slot="start" class="lens-icon-badge lens-icon-badge-neutral" name="trash-outline" aria-hidden="true"></ion-icon>
+                    <ion-label>{{ 'settings.clearCache' | translate }}</ion-label>
+                </ion-item>
+                <ion-item [button]="true" [detail]="false" (click)="deleteAllData()">
+                    <ion-icon slot="start" class="lens-icon-badge lens-icon-badge-danger" name="trash-outline" aria-hidden="true"></ion-icon>
+                    <ion-label class="fw-semibold" color="danger">{{ 'settings.deleteAllData' | translate }}</ion-label>
+                </ion-item>
+            </ion-list>
+        </section>
+
+        <section class="d-flex flex-column gap-2" aria-labelledby="settings-about-title">
+            <h2 id="settings-about-title" class="lens-font-brand fs-6 fw-bold text-body-secondary m-0 px-2">{{ 'settings.aboutSection' | translate }}</h2>
+            <ion-list class="lens-card">
+                <ion-item>
+                    <img slot="start" class="lens-settings-app-icon flex-shrink-0 rounded-3" src="assets/icon.png" alt="" width="44" height="44" decoding="async" />
+                    <ion-label class="ion-text-wrap py-2">
+                        <p class="lens-font-brand fs-5 fw-bold lh-sm text-white m-0">Lens <span class="lens-brand-accent">Viva</span></p>
+                        <p class="mt-1 mb-0">{{ 'settings.aboutText' | translate }}</p>
+                        <p class="mt-1 mb-0">{{ 'settings.version' | translate: { version: appVersion } }}</p>
+                    </ion-label>
+                </ion-item>
+                <ion-item [button]="true" [detail]="true" (click)="openTerms()">
+                    <ion-icon slot="start" class="lens-icon-badge" name="document-text-outline" aria-hidden="true"></ion-icon>
+                    <ion-label>{{ 'terms.title' | translate }}</ion-label>
+                </ion-item>
+            </ion-list>
+        </section>
+    </form>
+</app-layout>

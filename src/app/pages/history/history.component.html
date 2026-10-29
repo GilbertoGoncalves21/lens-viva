@@ -1,0 +1,68 @@
+<app-layout [title]="'history.title' | translate" [backHref]="'/settings'">
+    @if (items.length > 0) {
+        <ion-button layoutActions color="danger" fill="clear" [attr.aria-label]="'history.clear' | translate" (click)="clearHistory()">
+            <ion-icon slot="icon-only" name="trash-outline" aria-hidden="true"></ion-icon>
+        </ion-button>
+    }
+
+    <section class="lens-page d-flex flex-column gap-3 px-3 pt-3 pb-5">
+        @if (items.length > 0) {
+            @if (!historyEnabled) {
+                <p class="lens-callout lens-callout-amber d-flex align-items-start gap-2 m-0 px-3 py-2">
+                    <ion-icon name="alert-circle-outline" aria-hidden="true"></ion-icon>
+                    <span>{{ 'history.disabledMessage' | translate }}</span>
+                </p>
+            }
+            <ion-list class="lens-history-list d-flex flex-column gap-3 m-0 p-0">
+                @for (item of items; track trackByItem($index, item)) {
+                    @let sourceName = item.entry.sourceLanguage | languageName: displayLanguage;
+                    @let targetName = item.entry.targetLanguage | languageName: displayLanguage;
+                    <ion-item lines="none">
+                        <ion-label class="ion-text-wrap py-2" tabindex="-1" [id]="item.elementId">
+                            <p class="lens-history-original mb-2 text-break">
+                                <span class="visually-hidden">{{ 'history.originalLabel' | translate }} </span>
+                                <span class="d-block" dir="auto" [attr.lang]="item.entry.sourceLanguage">{{ item.entry.originalText }}</span>
+                            </p>
+                            <strong class="lens-history-translation d-block fw-semibold mb-2 text-break">
+                                <span class="visually-hidden">{{ 'history.translationLabel' | translate }} </span>
+                                <span class="d-block" dir="auto" [attr.lang]="item.entry.targetLanguage">{{ item.entry.translatedText }}</span>
+                            </strong>
+                            <p class="d-flex flex-wrap align-items-center column-gap-2 row-gap-1 m-0">
+                                <small class="lens-history-pair rounded-pill px-2" aria-hidden="true">{{ 'history.languagePair' | translate: { source: sourceName, target: targetName } }}</small>
+                                <small class="visually-hidden">{{ 'history.languagePairLabel' | translate: { source: sourceName, target: targetName } }}</small>
+                                @if (item.savedAt) {
+                                    <small><time [attr.datetime]="item.entry.createdAt">{{ 'history.savedAt' | translate: { date: item.savedAt } }}</time></small>
+                                }
+                            </p>
+                        </ion-label>
+                        <ion-button
+                            slot="end"
+                            color="danger"
+                            fill="clear"
+                            [attr.aria-label]="'history.deleteEntry' | translate: { text: item.excerpt }"
+                            (click)="removeEntry(item)"
+                        >
+                            <ion-icon slot="icon-only" name="trash-outline" aria-hidden="true"></ion-icon>
+                        </ion-button>
+                    </ion-item>
+                }
+            </ion-list>
+        } @else if (loaded) {
+            <section class="d-flex flex-column align-items-center text-center gap-3 px-4 py-5 my-4">
+                <span class="lens-history-ring d-inline-flex align-items-center justify-content-center rounded-circle" aria-hidden="true">
+                    <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+                </span>
+                @if (historyEnabled) {
+                    <h2 class="lens-font-brand fs-5 fw-bold m-0" tabindex="-1" [id]="stateTitleId">{{ 'history.empty' | translate }}</h2>
+                } @else {
+                    <h2 class="lens-font-brand fs-5 fw-bold m-0" tabindex="-1" [id]="stateTitleId">{{ 'history.disabledTitle' | translate }}</h2>
+                    <p class="lens-history-message m-0"><ion-text color="medium">{{ 'history.disabledMessage' | translate }}</ion-text></p>
+                    <ion-button class="m-0 mt-2" (click)="openSettings()">
+                        <ion-icon slot="start" name="settings-outline" aria-hidden="true"></ion-icon>
+                        {{ 'history.openSettings' | translate }}
+                    </ion-button>
+                }
+            </section>
+        }
+    </section>
+</app-layout>

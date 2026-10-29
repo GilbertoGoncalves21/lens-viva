@@ -1,0 +1,21 @@
+# Normalize source and documentation across Windows, macOS, and Linux.
+* text=auto
+*.md text eol=lf
+*.json text eol=lf
+*.ts text eol=lf
+*.html text eol=lf
+*.scss text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.mjs text eol=lf
+*.kt text eol=lf
+*.gradle text eol=lf
+*.sh text eol=lf
+gradlew text eol=lf
+*.bat text eol=crlf
+*.png binary
+*.ico binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.jar binary

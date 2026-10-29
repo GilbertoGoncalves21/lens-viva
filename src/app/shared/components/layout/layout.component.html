@@ -1,0 +1,28 @@
+<ion-header class="ion-no-border" [class.lens-chrome-dark]="transparent()">
+    <ion-toolbar>
+        @if (showBrand()) {
+            <section slot="start" class="d-flex align-items-center gap-2 ps-1">
+                <img class="lens-brand-logo flex-shrink-0" src="assets/icon.png" alt="" width="32" height="32" decoding="async" />
+                <h1 class="lens-wordmark m-0 lh-1 text-nowrap">Lens <span class="lens-brand-accent">Viva</span></h1>
+            </section>
+        } @else {
+            @if (backHref(); as href) {
+                <ion-buttons slot="start">
+                    <ion-back-button [defaultHref]="href" [text]="'common.back' | translate"></ion-back-button>
+                </ion-buttons>
+            }
+            <ion-title role="heading" aria-level="1">{{ title() }}</ion-title>
+        }
+        <ion-buttons slot="end">
+            <ng-content select="[layoutActions]"></ng-content>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content class="flex-grow-1" [class.lens-content-transparent]="transparent()">
+    <ng-content></ng-content>
+</ion-content>
+@if (showFooter()) {
+    <ion-footer class="ion-no-border" [class.lens-chrome-dark]="transparent()">
+        <ng-content select="[layoutFooter]"></ng-content>
+    </ion-footer>
+}

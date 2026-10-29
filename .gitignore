@@ -1,4 +1,4 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# Repository source belongs in Git; local output and credentials do not.
 
 # Compiled output
 /dist
@@ -7,7 +7,7 @@
 /bazel-out
 
 # Node
-/node_modules
+node_modules/
 npm-debug.log
 yarn-error.log
 
@@ -42,3 +42,28 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Local delivery artifacts and generated binaries
+/artifacts/
+*.apk
+*.aab
+*.ap_
+*.log
+
+# Local environment and signing material; keep configuration templates
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.jks
+*.keystore
+*.p12
+*.pfx
+/android/key.properties
+/android/keystore.properties
+/android/app/google-services.json
+
+# Additional local caches and operating system files
+/.angular/
+.history/
+Desktop.ini

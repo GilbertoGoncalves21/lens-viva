@@ -1,0 +1,15 @@
+:host {
+    ion-item ion-button {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    ion-item ion-note[slot='end'] {
+        font-weight: 600;
+    }
+
+    ion-button ion-spinner {
+        height: 1.35em;
+        width: 1.35em;
+    }
+}

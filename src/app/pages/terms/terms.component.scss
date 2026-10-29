@@ -1,0 +1,46 @@
+:host {
+    .lens-terms {
+        color: var(--lens-text-body);
+        font-size: 1rem;
+        line-height: 1.6;
+        max-width: 680px;
+        width: 100%;
+
+        > section + section {
+            border-top: 1px solid var(--lens-border-subtle);
+            padding-top: 24px;
+        }
+
+        h2 {
+            color: var(--lens-text-primary);
+            line-height: 1.3;
+        }
+    }
+
+    .lens-terms-header {
+        border-bottom: 1px solid var(--lens-border-subtle);
+    }
+
+    .lens-terms-intro {
+        color: var(--lens-text-primary);
+        font-size: 1.0625rem;
+        line-height: 1.65;
+    }
+
+    .lens-terms-updated {
+        background: rgba(129, 140, 248, 0.12);
+        border: 1px solid rgba(129, 140, 248, 0.24);
+        color: var(--lens-indigo-soft);
+        font-size: 0.8125rem;
+        font-weight: 600;
+        line-height: 1.5;
+
+        ion-icon {
+            font-size: 1rem;
+        }
+    }
+
+    .lens-terms-footer {
+        border-top: 1px solid var(--lens-border-subtle);
+    }
+}

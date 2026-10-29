@@ -1,0 +1,52 @@
+@if (visible) {
+    <section
+        class="lens-splash position-fixed top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center"
+        [class.lens-splash-leaving]="leaving"
+        [class.lens-splash-reduced]="reducedMotion"
+    >
+        <span class="visually-hidden" role="status">{{ 'splash.loading' | translate }}</span>
+
+        <section class="lens-splash-glow" aria-hidden="true">
+            <span class="lens-splash-glow-indigo"></span>
+            <span class="lens-splash-glow-amber"></span>
+        </section>
+
+        <section class="lens-splash-mark position-relative" aria-hidden="true">
+            <svg class="lens-splash-brackets" viewBox="0 0 120 120" focusable="false">
+                <defs>
+                    <linearGradient id="lens-splash-amber" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" stop-color="#fbbf24"></stop>
+                        <stop offset="1" stop-color="#f97316"></stop>
+                    </linearGradient>
+                    <linearGradient id="lens-splash-indigo" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" stop-color="#818cf8"></stop>
+                        <stop offset="1" stop-color="#6366f1"></stop>
+                    </linearGradient>
+                </defs>
+                <path class="lens-splash-bracket lens-splash-bracket-top-start" pathLength="100" d="M14 50 V36 A22 22 0 0 1 36 14 H50"></path>
+                <path class="lens-splash-bracket lens-splash-bracket-top-end" pathLength="100" d="M70 14 H84 A22 22 0 0 1 106 36 V50"></path>
+                <path class="lens-splash-bracket lens-splash-bracket-bottom-start" pathLength="100" d="M50 106 H36 A22 22 0 0 1 14 84 V70"></path>
+                <path class="lens-splash-bracket lens-splash-bracket-bottom-end" pathLength="100" d="M106 70 V84 A22 22 0 0 1 84 106 H70"></path>
+            </svg>
+
+            <span class="lens-splash-glyphs position-absolute top-50 start-50 d-flex align-items-center">
+                <span class="lens-splash-latin">A</span>
+                <span class="lens-splash-divider"></span>
+                <span class="lens-splash-cjk" lang="zh">文</span>
+            </span>
+
+            <span class="lens-splash-scan position-absolute start-0 w-100"></span>
+        </section>
+
+        <p class="lens-splash-wordmark m-0" aria-hidden="true">
+            <span>Lens</span>
+            <span class="lens-splash-wordmark-accent">Viva</span>
+        </p>
+
+        <p class="lens-splash-tagline text-center px-4" aria-hidden="true">{{ 'splash.tagline' | translate }}</p>
+
+        <section class="lens-splash-progress position-absolute start-50" aria-hidden="true">
+            <span class="lens-splash-progress-bar d-block h-100"></span>
+        </section>
+    </section>
+}

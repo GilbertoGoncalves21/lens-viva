@@ -1,0 +1,415 @@
+<app-layout [showBrand]="true" [showFooter]="true" [transparent]="true">
+    <ion-button
+        layoutActions
+        class="lens-icon-button lens-glass-button"
+        fill="clear"
+        shape="round"
+        [id]="settingsButtonId"
+        [attr.aria-label]="'camera.openSettings' | translate"
+        (click)="openSettings()"
+    >
+        <ion-icon slot="icon-only" name="settings-outline" aria-hidden="true"></ion-icon>
+    </ion-button>
+
+    <section class="lens-camera position-absolute top-0 start-0 w-100 h-100 d-flex overflow-hidden" [class.lens-camera-native]="nativePlatform">
+        <section #cameraStage class="lens-stage flex-grow-1 d-flex align-items-center justify-content-center">
+            <section
+                #cameraFrame
+                class="lens-frame position-relative flex-shrink-0 overflow-hidden"
+                [class.lens-frame-blocking]="blockingPanel"
+                [class.lens-frame-scanning]="scanning"
+                [class.lens-frame-see-through]="nativePlatform && cameraVisible"
+            >
+                <section
+                    class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden pe-none z-0"
+                    aria-hidden="true"
+                    [attr.id]="active ? previewHostId : null"
+                ></section>
+
+                <section class="lens-corners position-absolute pe-none" aria-hidden="true">
+                    <span class="lens-corner lens-corner-top-start position-absolute top-0 start-0"></span>
+                    <span class="lens-corner lens-corner-top-end position-absolute top-0 end-0"></span>
+                    <span class="lens-corner lens-corner-bottom-start position-absolute bottom-0 start-0"></span>
+                    <span class="lens-corner lens-corner-bottom-end position-absolute bottom-0 end-0"></span>
+                </section>
+
+                <app-overlay-layer
+                    [items]="items"
+                    [fontScale]="fontScale"
+                    [frozen]="frozen"
+                    [granularity]="granularity"
+                    [showDebug]="showDebug"
+                    [sourceLanguage]="sourceLanguage"
+                    [targetLanguage]="targetLanguage"
+                    (balloonToggled)="toggleOriginal($event)"
+                ></app-overlay-layer>
+
+                <section class="position-absolute top-0 start-0 w-100 h-100 pe-none" role="status" aria-live="polite" [id]="statusAreaId">
+                    @switch (statusPanel) {
+                        @case (statusPanelKind.STARTING) {
+                            <section class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center p-3">
+                                <section class="lens-panel w-100 mh-100 overflow-auto d-flex flex-column align-items-center gap-3 p-4 text-center">
+                                    <ion-spinner class="lens-panel-spinner" name="crescent" aria-hidden="true"></ion-spinner>
+                                    <p class="lens-panel-text lh-base m-0">{{ 'camera.starting' | translate }}</p>
+                                </section>
+                            </section>
+                        }
+                        @case (statusPanelKind.BLACK_FRAMES) {
+                            <section class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center p-3">
+                                <section
+                                    class="lens-panel pe-auto w-100 mh-100 overflow-auto d-flex flex-column align-items-center gap-3 p-4 text-center"
+                                    [id]="blackFramesNoticeId"
+                                >
+                                    <span class="lens-panel-badge lens-panel-badge-attention d-flex flex-shrink-0 align-items-center justify-content-center rounded-circle">
+                                        <ion-icon class="lens-panel-icon" aria-hidden="true" [icon]="blackFramesIcon"></ion-icon>
+                                    </span>
+                                    <section class="d-flex flex-column gap-2">
+                                        <h2 class="lens-panel-title fw-bold lh-sm m-0">{{ 'camera.blackFramesTitle' | translate }}</h2>
+                                        <p class="lens-panel-text lh-base m-0">{{ 'camera.blackFramesMessage' | translate }}</p>
+                                    </section>
+                                    @if (canSwitchCamera) {
+                                        <ion-button
+                                            class="lens-status-action lens-pill lens-pill-primary fw-semibold w-100 m-0"
+                                            shape="round"
+                                            [attr.aria-disabled]="switchingCamera ? true : null"
+                                            [attr.aria-haspopup]="cameraPickerAvailable ? 'dialog' : null"
+                                            (click)="switchCamera(cameraPicker)"
+                                        >
+                                            <ion-icon slot="start" aria-hidden="true" [icon]="switchCameraIcon"></ion-icon>
+                                            {{ 'camera.switchCamera' | translate }}
+                                        </ion-button>
+                                    }
+                                </section>
+                            </section>
+                        }
+                        @case (statusPanelKind.TRANSLATION_UNSUPPORTED) {
+                            <section class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center p-3">
+                                <section class="lens-panel pe-auto w-100 mh-100 overflow-auto d-flex flex-column align-items-center gap-3 p-4 text-center">
+                                    <span class="lens-panel-badge lens-panel-badge-attention d-flex flex-shrink-0 align-items-center justify-content-center rounded-circle">
+                                        <ion-icon class="lens-panel-icon" name="language-outline" aria-hidden="true"></ion-icon>
+                                    </span>
+                                    <section class="d-flex flex-column gap-2">
+                                        <h2 class="lens-panel-title fw-bold lh-sm m-0">{{ 'camera.translationUnsupportedTitle' | translate }}</h2>
+                                        <p class="lens-panel-text lh-base m-0">{{ 'camera.translationUnsupportedMessage' | translate }}</p>
+                                    </section>
+                                </section>
+                            </section>
+                        }
+                        @case (statusPanelKind.PERMISSION_DENIED) {
+                            <section class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center p-3">
+                                <section class="lens-panel pe-auto w-100 mh-100 overflow-auto d-flex flex-column align-items-center gap-3 p-4 text-center">
+                                    <span class="lens-panel-badge d-flex flex-shrink-0 align-items-center justify-content-center rounded-circle">
+                                        <ion-icon class="lens-panel-icon" name="camera-outline" aria-hidden="true"></ion-icon>
+                                    </span>
+                                    <section class="d-flex flex-column gap-2">
+                                        <h2 class="lens-panel-title fw-bold lh-sm m-0">{{ 'camera.permissionDeniedTitle' | translate }}</h2>
+                                        <p class="lens-panel-text lh-base m-0">{{ 'camera.permissionDeniedMessage' | translate }}</p>
+                                        <p class="lens-panel-text lh-base m-0">{{ (canOpenAppSettings ? 'camera.permissionSettingsHint' : 'camera.permissionDeniedBrowserHint') | translate }}</p>
+                                    </section>
+                                    <ion-button class="lens-status-action lens-pill lens-pill-primary fw-semibold w-100 m-0" shape="round" (click)="retry()">
+                                        <ion-icon slot="start" name="camera-outline" aria-hidden="true"></ion-icon>
+                                        {{ 'camera.allowCamera' | translate }}
+                                    </ion-button>
+                                </section>
+                            </section>
+                        }
+                        @case (statusPanelKind.PERMISSION_BLOCKED) {
+                            <section class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center p-3">
+                                <section class="lens-panel pe-auto w-100 mh-100 overflow-auto d-flex flex-column align-items-center gap-3 p-4 text-center">
+                                    <span class="lens-panel-badge lens-panel-badge-attention d-flex flex-shrink-0 align-items-center justify-content-center rounded-circle">
+                                        <ion-icon class="lens-panel-icon" name="camera-outline" aria-hidden="true"></ion-icon>
+                                    </span>
+                                    <section class="d-flex flex-column gap-2">
+                                        <h2 class="lens-panel-title fw-bold lh-sm m-0">{{ 'camera.permissionBlockedTitle' | translate }}</h2>
+                                        <p class="lens-panel-text lh-base m-0">
+                                            {{ (canOpenAppSettings ? 'camera.permissionBlockedMessage' : 'camera.permissionBlockedBrowserHint') | translate }}
+                                        </p>
+                                    </section>
+                                    <section class="d-flex flex-column gap-2 w-100">
+                                        @if (canOpenAppSettings) {
+                                            <ion-button class="lens-status-action lens-pill lens-pill-primary fw-semibold w-100 m-0" shape="round" (click)="openAppSettings()">
+                                                <ion-icon slot="start" name="settings-outline" aria-hidden="true"></ion-icon>
+                                                {{ 'camera.openAppSettings' | translate }}
+                                            </ion-button>
+                                            <ion-button class="lens-status-action lens-pill lens-pill-ghost fw-semibold w-100 m-0" shape="round" fill="outline" (click)="retry()">
+                                                <ion-icon slot="start" name="refresh-outline" aria-hidden="true"></ion-icon>
+                                                {{ 'common.retry' | translate }}
+                                            </ion-button>
+                                        } @else {
+                                            <ion-button class="lens-status-action lens-pill lens-pill-primary fw-semibold w-100 m-0" shape="round" (click)="retry()">
+                                                <ion-icon slot="start" name="refresh-outline" aria-hidden="true"></ion-icon>
+                                                {{ 'common.retry' | translate }}
+                                            </ion-button>
+                                        }
+                                    </section>
+                                </section>
+                            </section>
+                        }
+                        @case (statusPanelKind.MODEL_MISSING) {
+                            <section class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center p-3">
+                                <section class="lens-panel pe-auto w-100 mh-100 overflow-auto d-flex flex-column align-items-center gap-3 p-4 text-center">
+                                    <span class="lens-panel-badge d-flex flex-shrink-0 align-items-center justify-content-center rounded-circle">
+                                        <ion-icon class="lens-panel-icon" name="cloud-download-outline" aria-hidden="true"></ion-icon>
+                                    </span>
+                                    <section class="d-flex flex-column gap-2">
+                                        <h2 class="lens-panel-title fw-bold lh-sm m-0">{{ 'camera.modelMissingTitle' | translate }}</h2>
+                                        <p class="lens-panel-text lh-base m-0">{{ 'camera.modelMissingMessage' | translate: { languages: missingLanguagesText } }}</p>
+                                        @if (missingWifiOnlyDownload) {
+                                            <p class="lens-panel-note m-0">{{ 'languages.wifiOnlyNote' | translate }}</p>
+                                        }
+                                    </section>
+                                    <section class="d-flex flex-column gap-1 w-100">
+                                        <ion-button
+                                            class="lens-status-action lens-pill lens-pill-primary fw-semibold w-100 m-0"
+                                            shape="round"
+                                            [attr.aria-disabled]="downloadingMissing ? true : null"
+                                            (click)="downloadMissingLanguages()"
+                                        >
+                                            @if (downloadingMissing) {
+                                                <ion-spinner class="lens-status-spinner" slot="start" name="crescent" aria-hidden="true"></ion-spinner>
+                                                {{ downloadStatusKey | translate }}
+                                            } @else {
+                                                <ion-icon slot="start" name="cloud-download-outline" aria-hidden="true"></ion-icon>
+                                                {{ 'camera.downloadModels' | translate }}
+                                            }
+                                        </ion-button>
+                                        <ion-button class="lens-text-button lens-link-button fw-semibold w-100 m-0" fill="clear" routerLink="/languages" routerDirection="forward">
+                                            <ion-icon slot="start" name="language-outline" aria-hidden="true"></ion-icon>
+                                            {{ 'camera.manageLanguages' | translate }}
+                                        </ion-button>
+                                    </section>
+                                </section>
+                            </section>
+                        }
+                        @case (statusPanelKind.ERROR) {
+                            <section class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center p-3">
+                                <section class="lens-panel pe-auto w-100 mh-100 overflow-auto d-flex flex-column align-items-center gap-3 p-4 text-center">
+                                    <span class="lens-panel-badge lens-panel-badge-attention d-flex flex-shrink-0 align-items-center justify-content-center rounded-circle">
+                                        <ion-icon class="lens-panel-icon" name="alert-circle-outline" aria-hidden="true"></ion-icon>
+                                    </span>
+                                    <section class="d-flex flex-column gap-2">
+                                        <h2 class="lens-panel-title fw-bold lh-sm m-0">{{ 'camera.errorTitle' | translate }}</h2>
+                                        <p class="lens-panel-text lh-base m-0">{{ 'camera.errorMessage' | translate }}</p>
+                                    </section>
+                                    <section class="d-flex flex-column gap-2 w-100">
+                                        <ion-button class="lens-status-action lens-pill lens-pill-primary fw-semibold w-100 m-0" shape="round" (click)="retry()">
+                                            <ion-icon slot="start" name="refresh-outline" aria-hidden="true"></ion-icon>
+                                            {{ 'common.retry' | translate }}
+                                        </ion-button>
+                                        @if (showErrorSwitchCamera) {
+                                            <ion-button
+                                                class="lens-status-action lens-pill lens-pill-ghost fw-semibold w-100 m-0"
+                                                shape="round"
+                                                fill="outline"
+                                                [attr.aria-disabled]="switchingCamera ? true : null"
+                                                [attr.aria-haspopup]="cameraPickerAvailable ? 'dialog' : null"
+                                                (click)="switchCamera(cameraPicker)"
+                                            >
+                                                <ion-icon slot="start" aria-hidden="true" [icon]="switchCameraIcon"></ion-icon>
+                                                {{ 'camera.switchCamera' | translate }}
+                                            </ion-button>
+                                        }
+                                    </section>
+                                </section>
+                            </section>
+                        }
+                        @case (statusPanelKind.CAMERA_BLOCKED) {
+                            <section class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center p-3">
+                                <section class="lens-panel pe-auto w-100 mh-100 overflow-auto d-flex flex-column align-items-center gap-3 p-4 text-center">
+                                    <span class="lens-panel-badge lens-panel-badge-attention d-flex flex-shrink-0 align-items-center justify-content-center rounded-circle">
+                                        <ion-icon class="lens-panel-icon" aria-hidden="true" [icon]="cameraBlockedIcon"></ion-icon>
+                                    </span>
+                                    <section class="d-flex flex-column gap-2">
+                                        <h2 class="lens-panel-title fw-bold lh-sm m-0">{{ 'camera.permissionBlockedTitle' | translate }}</h2>
+                                        <p class="lens-panel-text lh-base m-0">{{ 'camera.cameraBlockedBySystem' | translate }}</p>
+                                    </section>
+                                    <ion-button class="lens-status-action lens-pill lens-pill-primary fw-semibold w-100 m-0" shape="round" (click)="retry()">
+                                        <ion-icon slot="start" name="refresh-outline" aria-hidden="true"></ion-icon>
+                                        {{ 'common.retry' | translate }}
+                                    </ion-button>
+                                </section>
+                            </section>
+                        }
+                        @case (statusPanelKind.PAUSED) {
+                            <section class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center p-3">
+                                <section class="lens-panel w-100 mh-100 overflow-auto p-4 text-center">
+                                    <p class="lens-panel-text lh-base m-0">{{ 'camera.paused' | translate }}</p>
+                                </section>
+                            </section>
+                        }
+                    }
+                </section>
+
+                <p class="visually-hidden" role="status" aria-live="polite" aria-atomic="true" [id]="announcementId">{{ announcement }}</p>
+
+                <p class="visually-hidden" role="status" aria-live="polite" aria-atomic="true" [id]="frozenNoticeId">
+                    @if (frozen) {
+                        {{ 'camera.frozen' | translate }}
+                    }
+                </p>
+
+                <ion-select
+                    #sourceLanguagePicker
+                    class="d-none"
+                    interface="alert"
+                    [cancelText]="'common.cancel' | translate"
+                    [formControl]="sourceLanguageControl"
+                    [interfaceOptions]="{ header: ('camera.chooseSourceLanguageTitle' | translate) }"
+                    [label]="'camera.chooseSourceLanguageTitle' | translate"
+                    [okText]="'common.ok' | translate"
+                    (ionDismiss)="handlePickerDismissed()"
+                >
+                    <ion-select-option [value]="automaticLanguage">{{ automaticLanguage | languageName: currentLanguage }}</ion-select-option>
+                    @for (language of sourceLanguageOptions; track trackByLanguage($index, language)) {
+                        <ion-select-option [value]="language">{{ language | languageName: currentLanguage }}</ion-select-option>
+                    }
+                </ion-select>
+            </section>
+        </section>
+
+        <section class="lens-controls position-relative flex-shrink-0 d-flex flex-column align-items-center gap-1 px-3 pt-1 pb-3 overflow-y-auto">
+            <a id="camera-language-pair" class="lens-language-card" routerLink="/languages">
+                <span class="lens-language-column">
+                    <small>{{ 'languages.source' | translate }}</small>
+                    <strong>{{ (sceneLanguage || sourceLanguage) | languageName: currentLanguage }}</strong>
+                </span>
+                <ion-icon [icon]="pairArrowIcon" aria-hidden="true"></ion-icon>
+                <span class="lens-language-column">
+                    <small>{{ 'languages.target' | translate }}</small>
+                    <strong>{{ targetLanguage | languageName: currentLanguage }}</strong>
+                </span>
+                <ion-icon [icon]="editLanguagesIcon" aria-hidden="true"></ion-icon>
+            </a>
+            @if (onlineTranslationAvailable) {
+                <p class="lens-status-note m-0">{{ 'camera.onlineMode' | translate }}</p>
+                @if (onlineNoticeKey; as notice) {
+                    <p class="lens-status-note m-0" role="status">{{ notice | translate }}</p>
+                }
+            }
+            <section class="lens-status-line d-flex flex-column align-items-center justify-content-center w-100 mt-auto" role="status" aria-live="polite" [id]="statusLineId">
+                @switch (statusLine) {
+                    @case (statusLineKind.RECOGNITION_LOADING) {
+                        <p class="lens-status-text d-flex align-items-center justify-content-center gap-2 mw-100 m-0">
+                            <ion-spinner class="lens-status-spinner flex-shrink-0" name="crescent" aria-hidden="true"></ion-spinner>
+                            <span class="lens-status-label lh-sm text-center text-break">{{ 'camera.preparingRecognition' | translate }}</span>
+                        </p>
+                    }
+                    @case (statusLineKind.RECOGNITION_UNAVAILABLE) {
+                        <p class="lens-status-text d-flex align-items-center justify-content-center gap-2 mw-100 m-0">
+                            <ion-icon class="flex-shrink-0" aria-hidden="true" [icon]="recognitionUnavailableIcon"></ion-icon>
+                            <span class="lens-status-label lh-sm text-center text-break">{{ 'camera.recognitionUnavailable' | translate }}</span>
+                        </p>
+                    }
+                    @case (statusLineKind.HINT) {
+                        <p class="lens-status-text d-flex align-items-center justify-content-center gap-2 mw-100 m-0">
+                            <ion-icon class="flex-shrink-0" name="scan-outline" aria-hidden="true"></ion-icon>
+                            <span class="lens-status-label lh-sm text-center text-break">{{ 'camera.hint' | translate }}</span>
+                        </p>
+                    }
+                    @case (statusLineKind.IDENTIFYING) {
+                        <p class="lens-status-text lens-status-label lh-sm text-center text-break mw-100 m-0">{{ 'camera.identifyingLanguage' | translate }}</p>
+                    }
+                    @case (statusLineKind.UNDETERMINED) {
+                        <ion-button
+                            class="lens-status-button m-0 mw-100"
+                            fill="clear"
+                            aria-haspopup="dialog"
+                            [id]="languageStatusButtonId"
+                            (click)="openSourceLanguagePicker(sourceLanguagePicker)"
+                        >
+                            <span class="lens-status-label lh-sm text-center text-break">
+                                <span>{{ 'camera.languageUndetermined' | translate }}</span>&nbsp;<span class="mx-1" aria-hidden="true">·</span>&ngsp;
+                                <span class="lens-status-action-text fw-semibold">{{ 'camera.chooseLanguageAction' | translate }}</span>
+                            </span>
+                        </ion-button>
+                    }
+                    @case (statusLineKind.MISSING_PACK) {
+                        @let sceneName = sceneLanguage | languageName: currentLanguage;
+                        <ion-button
+                            class="lens-status-button m-0 mw-100"
+                            fill="clear"
+                            [id]="languageStatusButtonId"
+                            [attr.aria-disabled]="downloadingSceneLanguage ? true : null"
+                            (click)="downloadSceneLanguage()"
+                        >
+                            @if (downloadingSceneLanguage) {
+                                <ion-spinner class="lens-status-spinner flex-shrink-0 me-2" name="crescent" aria-hidden="true"></ion-spinner>
+                                <span class="lens-status-label lh-sm text-center text-break">{{ downloadStatusKey | translate }}</span>
+                            } @else {
+                                <span class="lens-status-label lh-sm text-center text-break">
+                                    <span>{{ 'camera.languageDetected' | translate: { language: sceneName } }}</span>&nbsp;<span class="mx-1" aria-hidden="true">·</span>&ngsp;
+                                    <span class="lens-status-action-text fw-semibold">{{ 'camera.downloadDetected' | translate }}</span>
+                                </span>
+                            }
+                        </ion-button>
+                        @if (wifiOnlyDownload) {
+                            <p class="lens-status-note lens-status-label lh-sm text-center text-break mw-100 m-0">{{ 'languages.wifiOnlyNote' | translate }}</p>
+                        }
+                    }
+                }
+            </section>
+
+            @if (showFreezeButton) {
+                <section class="lens-control-row d-flex align-items-center justify-content-center gap-4 mb-auto">
+                    <section class="lens-control-slot d-flex flex-shrink-0 align-items-center justify-content-center">
+                        @if (showSwitchCamera) {
+                            <ion-button
+                                class="lens-icon-button lens-glass-button"
+                                fill="clear"
+                                shape="round"
+                                [id]="switchCameraButtonId"
+                                [attr.aria-disabled]="switchingCamera ? true : null"
+                                [attr.aria-haspopup]="cameraPickerAvailable ? 'dialog' : null"
+                                [attr.aria-label]="'camera.switchCamera' | translate"
+                                (click)="switchCamera(cameraPicker)"
+                            >
+                                <ion-icon slot="icon-only" aria-hidden="true" [icon]="switchCameraIcon"></ion-icon>
+                            </ion-button>
+                        }
+                    </section>
+
+                    <button
+                        type="button"
+                        class="lens-shutter d-flex flex-column align-items-center gap-1"
+                        [class.lens-shutter-frozen]="frozen"
+                        [id]="freezeButtonId"
+                        [attr.aria-label]="(frozen ? 'camera.resumeLive' : 'camera.freeze') | translate"
+                        (click)="toggleFreeze()"
+                    >
+                        <span class="lens-shutter-ring d-flex align-items-center justify-content-center rounded-circle" aria-hidden="true">
+                            <span class="lens-shutter-core d-flex align-items-center justify-content-center rounded-circle">
+                                <ion-icon aria-hidden="true" [name]="frozen ? 'play-outline' : 'snow-outline'"></ion-icon>
+                            </span>
+                        </span>
+                        <span class="lens-shutter-label fw-semibold lh-sm text-center text-nowrap">{{ (frozen ? 'camera.resumeShort' : 'camera.freezeShort') | translate }}</span>
+                    </button>
+
+                    <section class="lens-control-slot flex-shrink-0"></section>
+                </section>
+            }
+
+            <ion-select
+                #cameraPicker
+                class="d-none"
+                interface="alert"
+                [cancelText]="'common.cancel' | translate"
+                [formControl]="cameraControl"
+                [interfaceOptions]="{ header: ('camera.chooseCameraTitle' | translate) }"
+                [label]="'camera.chooseCameraTitle' | translate"
+                [okText]="'common.ok' | translate"
+                (ionDismiss)="handleCameraPickerDismissed()"
+            >
+                @for (camera of cameras; track trackByCameraId($index, camera)) {
+                    <ion-select-option [value]="camera.cameraId">{{ cameraName(camera) }}</ion-select-option>
+                }
+            </ion-select>
+        </section>
+    </section>
+
+    <section layoutFooter class="lens-footer d-flex align-items-center justify-content-between gap-3 px-3">
+        <p class="m-0">{{ 'camera.version' | translate: { version: appVersion } }}</p>
+        <ion-button class="lens-text-button lens-footer-link m-0" fill="clear" routerLink="/terms" routerDirection="forward">
+            <span class="text-decoration-underline">{{ 'camera.termsOfUse' | translate }}</span>
+        </ion-button>
+    </section>
+</app-layout>

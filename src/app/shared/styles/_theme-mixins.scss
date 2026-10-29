@@ -1,0 +1,86 @@
+$dialog-cancel-border: rgba(229, 231, 235, 0.28);
+$dialog-confirm-pressed: #3730a3;
+$dialog-confirm-shadow: 0 10px 24px -12px rgba(79, 70, 229, 0.8);
+$dialog-glow: radial-gradient(120% 60% at 50% 0%, rgba(99, 102, 241, 0.14), transparent 70%);
+$dialog-quiet-fill: rgba(229, 231, 235, 0.08);
+$dialog-selected-fill: rgba(99, 102, 241, 0.12);
+$dialog-shadow: var(--lens-shadow-lg), 0 0 0 1px rgba(2, 6, 23, 0.4);
+
+@mixin focus-ring($offset: 2px) {
+    outline: 2px solid var(--lens-focus-ring);
+    outline-offset: $offset;
+}
+
+@mixin dialog-title {
+    color: var(--lens-text-primary);
+    font-family: var(--lens-font-brand);
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+}
+
+@mixin dialog-message {
+    color: var(--lens-text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+}
+
+@mixin dialog-button {
+    min-height: 3rem;
+    margin: 0;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid transparent;
+    border-radius: var(--lens-radius-pill);
+    font-family: var(--lens-font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.005em;
+    line-height: 1.25;
+    text-transform: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color var(--lens-motion-fast, 150ms) var(--lens-easing, cubic-bezier(0.2, 0, 0, 1)), border-color var(--lens-motion-fast, 150ms) var(--lens-easing, cubic-bezier(0.2, 0, 0, 1)), transform 0.1s ease;
+
+    &:active {
+        transform: scale(0.98);
+    }
+
+    &:focus-visible {
+        @include focus-ring;
+    }
+}
+
+@mixin dialog-confirm-button {
+    background-color: var(--lens-indigo-strong);
+    box-shadow: $dialog-confirm-shadow;
+    color: #ffffff;
+
+    &:hover {
+        background-color: var(--lens-indigo-strong-active);
+    }
+
+    &:active {
+        background-color: $dialog-confirm-pressed;
+    }
+}
+
+@mixin dialog-cancel-button {
+    border-color: $dialog-cancel-border;
+    background-color: transparent;
+    box-shadow: none;
+    color: var(--lens-mist);
+
+    &:hover,
+    &:active {
+        border-color: var(--lens-text-secondary);
+        background-color: $dialog-quiet-fill;
+    }
+}
+
+@mixin dialog-static-button {
+    transition: none;
+
+    &:active {
+        transform: none;
+    }
+}

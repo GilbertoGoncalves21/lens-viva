@@ -1,0 +1,163 @@
+<app-layout [title]="'languages.title' | translate" [backHref]="'/camera'">
+    <section class="lens-page d-flex flex-column gap-4 px-3 pt-3 pb-5">
+        <section class="d-flex flex-column gap-2" aria-labelledby="languages-pair-title">
+            <h2 id="languages-pair-title" class="lens-font-brand fs-6 fw-bold text-body-secondary m-0 px-2">{{ 'languages.pairTitle' | translate }}</h2>
+            <form [formGroup]="form">
+                <ion-list class="lens-card">
+                    <ion-item>
+                        <ion-icon slot="start" class="lens-icon-badge lens-icon-badge-neutral" name="scan-outline" aria-hidden="true"></ion-icon>
+                        <section class="lens-language-field">
+                        <label for="source-language">{{ 'languages.source' | translate }}</label>
+                        <select id="source-language" formControlName="sourceLanguage">
+                            <option [value]="autoLanguage">{{ autoLanguage | languageName: displayLanguage }}</option>
+                            @for (language of sourceOptions; track trackByLanguage($index, language)) {
+                                <option [value]="language">{{ language | languageName: displayLanguage }}</option>
+                            }
+                        </select>
+                        </section>
+                    </ion-item>
+                    <ion-item>
+                        <ion-icon slot="start" class="lens-icon-badge" name="language-outline" aria-hidden="true"></ion-icon>
+                        <section class="lens-language-field">
+                            <label for="target-language">{{ 'languages.target' | translate }}</label>
+                            <select id="target-language" [formControl]="targetLanguageControl">
+                                @for (language of targetOptions; track language) {
+                                    <option [value]="language">{{ language | languageName: displayLanguage }}</option>
+                                }
+                            </select>
+                        </section>
+                    </ion-item>
+                    <ion-item [button]="true" [detail]="true" (click)="openSettings()">
+                        <ion-icon slot="start" class="lens-icon-badge lens-icon-badge-neutral" name="settings-outline" aria-hidden="true"></ion-icon>
+                        <ion-label class="ion-text-wrap">{{ 'languages.changeAppLanguage' | translate }}</ion-label>
+                    </ion-item>
+                </ion-list>
+            </form>
+            @if (autoSourceSelected) {
+                <p class="lens-callout d-flex align-items-start gap-2 m-0 px-3 py-2">
+                    <ion-icon name="sparkles-outline" aria-hidden="true"></ion-icon>
+                    <span>{{ 'languages.autoDetectNote' | translate }}</span>
+                </p>
+            }
+            <p class="m-0 px-2"><ion-note>{{ 'languages.sourceNote' | translate }}</ion-note></p>
+            @if (onlineTranslationAvailable) {
+                <p class="lens-callout m-0 px-3 py-2">{{ 'languages.onlineReady' | translate }}</p>
+            }
+        </section>
+
+        <section class="d-flex flex-column gap-2" aria-labelledby="languages-models-title">
+            <header class="d-flex flex-column gap-1 px-2">
+                <h2 id="languages-models-title" class="lens-font-brand fs-6 fw-bold text-body-secondary m-0" tabindex="-1">{{ 'languages.modelsTitle' | translate }}</h2>
+                <p class="m-0"><ion-note>{{ 'languages.modelsDescription' | translate }}</ion-note></p>
+            </header>
+            @if (!translationSupported) {
+                <p class="lens-callout lens-callout-amber d-flex align-items-start gap-2 m-0 px-3 py-2">
+                    <ion-icon name="alert-circle-outline" aria-hidden="true"></ion-icon>
+                    <span>{{ 'camera.translationUnsupportedMessage' | translate }}</span>
+                </p>
+            } @else if (browserManagedModels) {
+                <p class="lens-callout lens-callout-neutral d-flex align-items-start gap-2 m-0 px-3 py-2">
+                    <ion-icon name="help-circle-outline" aria-hidden="true"></ion-icon>
+                    <span>{{ 'languages.browserModelsNote' | translate }}</span>
+                </p>
+            }
+            <p class="m-0" role="status">
+                @if (!online) {
+                    <span class="lens-callout lens-callout-amber d-flex align-items-start gap-2 px-3 py-2">
+                        <ion-icon name="alert-circle-outline" aria-hidden="true"></ion-icon>
+                        <span>{{ 'languages.offlineNote' | translate }}</span>
+                    </span>
+                }
+            </p>
+            <ion-list class="lens-card">
+                @for (model of pairModels; track trackByModel($index, model)) {
+                    <ng-container [ngTemplateOutlet]="modelItem" [ngTemplateOutletContext]="{ $implicit: model }" />
+                }
+            </ion-list>
+            @if (requireWifiForDownloads) {
+                <p class="m-0 px-2"><ion-note>{{ 'languages.wifiOnlyNote' | translate }}</ion-note></p>
+            }
+            @if (pairReady) {
+                <ion-button class="m-0 mt-2" expand="block" size="large" (click)="openCamera()">
+                    <ion-icon slot="start" name="camera-outline" aria-hidden="true"></ion-icon>
+                    {{ 'languages.openCamera' | translate }}
+                </ion-button>
+            }
+        </section>
+
+        @if (recognitionModels.length > 0) {
+            <section class="d-flex flex-column gap-2" aria-labelledby="languages-recognition-title">
+                <header class="d-flex flex-column gap-1 px-2">
+                    <h2 id="languages-recognition-title" class="lens-font-brand fs-6 fw-bold text-body-secondary m-0" tabindex="-1">{{ 'languages.recognitionModelsTitle' | translate }}</h2>
+                    <p class="m-0"><ion-note>{{ 'languages.recognitionModelsDescription' | translate }}</ion-note></p>
+                </header>
+                <ion-list class="lens-card">
+                    @for (model of recognitionModels; track trackByModel($index, model)) {
+                        <ng-container [ngTemplateOutlet]="modelItem" [ngTemplateOutletContext]="{ $implicit: model }" />
+                    }
+                </ion-list>
+            </section>
+        }
+
+        @if (otherModels.length > 0) {
+            <section class="d-flex flex-column gap-2" aria-labelledby="languages-other-title">
+                <h2 id="languages-other-title" class="lens-font-brand fs-6 fw-bold text-body-secondary m-0 px-2" tabindex="-1">{{ 'languages.otherModelsTitle' | translate }}</h2>
+                <ion-list class="lens-card">
+                    @for (model of otherModels; track trackByModel($index, model)) {
+                        <ng-container [ngTemplateOutlet]="modelItem" [ngTemplateOutletContext]="{ $implicit: model }" />
+                    }
+                </ion-list>
+            </section>
+        }
+    </section>
+</app-layout>
+
+<ng-template #modelItem let-model>
+    <ion-item>
+        <span slot="start" class="lens-icon-badge" [class.lens-icon-badge-neutral]="!model.downloaded" aria-hidden="true">{{ model.language }}</span>
+        <ion-label class="ion-text-wrap">
+            <h3 class="fs-6 fw-semibold">{{ model.language | languageName: displayLanguage }}</h3>
+            <p class="d-flex align-items-center gap-2 mt-1" aria-live="polite">
+                @if (model.downloading) {
+                    <ion-text color="medium">{{ downloadStatusKey | translate }}</ion-text>
+                } @else if (model.downloaded) {
+                    <ion-badge color="success">{{ 'languages.downloaded' | translate }}</ion-badge>
+                } @else {
+                    <ion-badge color="medium">{{ 'languages.notDownloaded' | translate }}</ion-badge>
+                }
+            </p>
+        </ion-label>
+        @if (model.downloading || !model.downloaded) {
+            @if (translationSupported) {
+                <ion-button
+                    slot="end"
+                    class="lens-button-tonal"
+                    size="default"
+                    [attr.aria-label]="model.downloading
+                        ? (downloadStatusKey | translate)
+                        : ('languages.downloadLanguage' | translate: { language: (model.language | languageName: displayLanguage : true) })"
+                    (click)="downloadModel(model.language)"
+                >
+                    @if (model.downloading) {
+                        <ion-spinner slot="start" name="crescent" class="me-1" aria-hidden="true"></ion-spinner>
+                    } @else {
+                        <ion-icon slot="start" name="cloud-download-outline" aria-hidden="true"></ion-icon>
+                    }
+                    {{ (model.downloading ? downloadStatusKey : 'languages.download') | translate }}
+                </ion-button>
+            }
+        } @else if (model.removable) {
+            <ion-button
+                slot="end"
+                fill="clear"
+                color="danger"
+                [attr.aria-label]="'languages.deleteLanguage' | translate: { language: (model.language | languageName: displayLanguage : true) }"
+                (click)="removeModel(model.language)"
+            >
+                <ion-icon slot="icon-only" name="trash-outline" aria-hidden="true"></ion-icon>
+            </ion-button>
+        } @else if (modelRemovalSupported) {
+            <ion-note slot="end">{{ 'languages.builtIn' | translate }}</ion-note>
+        }
+    </ion-item>
+</ng-template>

@@ -1,0 +1,57 @@
+@if (showDebug()) {
+    @for (item of items(); track trackByRegionId($index, item)) {
+        <span
+            class="lens-debug-region position-absolute rounded-1"
+            aria-hidden="true"
+            [style.left.%]="item.anchorRect.x * 100"
+            [style.top.%]="item.anchorRect.y * 100"
+            [style.width.%]="item.anchorRect.width * 100"
+            [style.height.%]="item.anchorRect.height * 100"
+        ></span>
+    }
+}
+<span hidden [id]="showOriginalHintId">{{ 'camera.balloon.showOriginal' | translate }}</span>
+@if (readingMode) {
+    <section class="lens-reading-panel pe-auto" aria-labelledby="lens-reading-title">
+        <header>
+            <strong id="lens-reading-title">{{ 'camera.readingTitle' | translate }}</strong>
+            <span>{{ 'camera.readingHint' | translate }}</span>
+        </header>
+        <section class="lens-reading-content" tabindex="0" [style.font-size.px]="readingFontSize" [attr.aria-label]="'camera.readingTitle' | translate">
+            @for (item of readingItems; track item.regionId) {
+                <button type="button" class="lens-reading-paragraph" [class.lens-balloon-original]="item.showOriginal"
+                    [attr.aria-pressed]="item.showOriginal" [attr.aria-describedby]="showOriginalHintId"
+                    [attr.data-region-id]="item.regionId" (click)="toggle(item)">
+                    <span dir="auto" [attr.lang]="displayedLanguage(item)">{{ displayedText(item) }}</span>
+                </button>
+            }
+        </section>
+    </section>
+} @else {
+@for (item of balloons; track trackByRegionId($index, item)) {
+    @let placement = placementFor(item);
+    @let expiring = isExpiring(item);
+    <button
+        type="button"
+        class="lens-balloon position-absolute d-flex align-items-center text-start fw-medium m-0"
+        [class.lens-balloon-original]="item.showOriginal"
+        [class.opacity-0]="expiring"
+        [class.pe-auto]="!expiring"
+        [style.left.px]="placement.left"
+        [style.top.px]="placement.top"
+        [style.width.px]="placement.width"
+        [style.min-height.px]="placement.minHeight"
+        [style.transform]="balloonTransform(placement)"
+        [style.font-size.px]="placement.fontSize"
+        [attr.aria-describedby]="expiring ? null : showOriginalHintId"
+        [attr.aria-hidden]="expiring ? true : null"
+        [attr.aria-pressed]="item.showOriginal"
+        [attr.tabindex]="expiring ? -1 : null"
+        [attr.data-region-id]="item.regionId"
+        (click)="toggle(item)"
+    >
+        <span class="lens-balloon-text" dir="auto" [attr.lang]="displayedLanguage(item)">{{ displayedText(item) }}</span>
+    </button>
+}
+
+}

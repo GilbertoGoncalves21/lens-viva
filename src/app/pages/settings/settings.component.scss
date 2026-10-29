@@ -1,0 +1,13 @@
+:host {
+    ion-range::part(label),
+    ion-select::part(label),
+    ion-toggle::part(label) {
+        white-space: normal;
+    }
+
+    .lens-settings-app-icon {
+        box-shadow: 0 0 0 1px var(--lens-border-subtle);
+        margin-block: 8px;
+        margin-inline: 0 16px;
+    }
+}

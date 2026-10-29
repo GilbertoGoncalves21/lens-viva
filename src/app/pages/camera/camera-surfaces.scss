@@ -1,0 +1,144 @@
+:host {
+    .lens-panel,
+    .lens-glass-button {
+        backdrop-filter: blur(16px) saturate(140%);
+        background: var(--lens-glass);
+        border: 1px solid var(--lens-border-subtle);
+        color: var(--lens-text-primary);
+    }
+
+    .lens-panel {
+        border-radius: var(--lens-radius-lg);
+        box-shadow: var(--lens-shadow-lg);
+        max-width: 22rem;
+    }
+
+    .lens-panel-badge {
+        background: #6366f12e;
+        color: var(--lens-indigo-text);
+        font-size: 1.75rem;
+        height: 3.5rem;
+        width: 3.5rem;
+    }
+
+    .lens-panel-badge-attention {
+        background: #f59e0b29;
+        color: #fbbf24;
+    }
+
+    .lens-panel-title {
+        font-family: var(--lens-font-brand);
+        font-size: 1.1875rem;
+    }
+
+    .lens-panel-text,
+    .lens-panel-note {
+        color: var(--lens-text-body);
+    }
+
+    .lens-footer,
+    .lens-status-text,
+    .lens-status-note {
+        color: var(--lens-text-secondary);
+    }
+
+    .lens-panel-note,
+    .lens-footer,
+    .lens-footer-link,
+    .lens-shutter-label,
+    .lens-status-note {
+        font-size: 0.8125rem;
+    }
+
+    .lens-status-text {
+        font-size: 0.875rem;
+    }
+
+    .lens-panel-spinner,
+    .lens-status-action-text {
+        color: var(--lens-indigo-text);
+    }
+
+    .lens-status-spinner {
+        height: 1.125rem;
+        width: 1.125rem;
+    }
+
+    .lens-pill,
+    .lens-text-button,
+    .lens-status-button {
+        letter-spacing: normal;
+        text-transform: none;
+    }
+
+    .lens-pill {
+        --box-shadow: none;
+        --padding-end: 1.25rem;
+        --padding-start: 1.25rem;
+        font-size: 0.9375rem;
+        min-height: 2.75rem;
+    }
+
+    .lens-pill-primary {
+        --background: var(--lens-indigo-strong);
+        --background-hover: #fff;
+        --background-hover-opacity: 0.1;
+        --color: #fff;
+    }
+
+    .lens-pill-ghost {
+        --border-color: #e5e7eb47;
+        --border-width: 1px;
+        --color: var(--lens-text-primary);
+    }
+
+    .lens-text-button {
+        --color: var(--lens-text-primary);
+        --padding-bottom: 0.25rem;
+        --padding-top: 0.25rem;
+        min-height: 2.75rem;
+    }
+
+    .lens-link-button {
+        --color: var(--lens-indigo-text);
+    }
+
+    .lens-footer-link {
+        --color: var(--lens-text-secondary);
+        min-height: 2.75rem;
+    }
+
+    .lens-status-button {
+        --border-radius: var(--lens-radius-pill);
+        --color: var(--lens-text-secondary);
+        --padding-bottom: 0.25rem;
+        --padding-end: 0.75rem;
+        --padding-start: 0.75rem;
+        --padding-top: 0.25rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        min-height: 2.75rem;
+    }
+
+    .lens-glass-button {
+        --color: var(--lens-text-primary);
+        --padding-end: 0;
+        --padding-start: 0;
+        background: #1e293bbf;
+        border-radius: 50%;
+        height: 2.75rem;
+        margin: 0;
+        width: 2.75rem;
+    }
+
+    .lens-control-slot .lens-glass-button {
+        height: 3rem;
+        width: 3rem;
+    }
+
+    .ion-focused,
+    .lens-shutter:focus-visible {
+        outline: 2px solid var(--lens-focus-ring);
+        outline-offset: 2px;
+    }
+}

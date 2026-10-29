@@ -1,0 +1,55 @@
+:host {
+    ion-button {
+        min-height: 48px;
+        min-width: 48px;
+    }
+
+    .lens-history-list {
+        background: transparent;
+
+        ion-item {
+            --background: var(--lens-surface-2);
+            --inner-padding-end: 8px;
+            --padding-start: 18px;
+            border: 1px solid var(--lens-border-subtle);
+            border-radius: var(--lens-radius-lg);
+            box-shadow: var(--lens-shadow-card);
+            overflow: hidden;
+        }
+    }
+
+    .lens-history-original {
+        color: var(--lens-text-secondary);
+        font-size: 0.9375rem;
+        line-height: 1.5;
+    }
+
+    .lens-history-translation {
+        color: var(--lens-text-primary);
+        font-size: 1.0625rem;
+        line-height: 1.45;
+    }
+
+    .lens-history-pair {
+        background: rgba(129, 140, 248, 0.14);
+        color: var(--lens-indigo-soft);
+        font-weight: 600;
+        padding-block: 2px;
+    }
+
+    .lens-history-ring {
+        background: radial-gradient(circle, rgba(99, 102, 241, 0.24), rgba(99, 102, 241, 0.06) 70%);
+        box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.3), 0 0 0 12px rgba(129, 140, 248, 0.06);
+        color: var(--lens-indigo-text);
+        height: 88px;
+        width: 88px;
+
+        ion-icon {
+            font-size: 40px;
+        }
+    }
+
+    .lens-history-message {
+        max-width: 340px;
+    }
+}

@@ -1,0 +1,197 @@
+:host {
+    .lens-camera {
+        background: radial-gradient(70% 55% at 50% 40%, #6366f129, #0000 72%), var(--lens-surface-0);
+        color: var(--lens-text-primary);
+        flex-direction: column;
+        padding-left: var(--ion-safe-area-left, 0px);
+        padding-right: var(--ion-safe-area-right, 0px);
+    }
+
+    .lens-camera-native {
+        background: none;
+
+        .lens-frame {
+            box-shadow: 0 0 0 100vmax var(--lens-surface-0);
+        }
+    }
+
+    .lens-stage {
+        container-type: size;
+        min-height: 0;
+        min-width: 0;
+    }
+
+    .lens-frame {
+        aspect-ratio: 4 / 5;
+        background: linear-gradient(165deg, var(--lens-surface-2), var(--lens-surface-0) 70%);
+        border-radius: 1.75rem;
+        box-shadow: 0 2rem 4rem -2rem #020617f2;
+        width: calc(100% - 1.5rem);
+        width: min(100cqw - 1.5rem, (100cqh - 1.5rem) * 0.8);
+
+        &::after {
+            border: 1px solid #e5e7eb1a;
+            border-radius: inherit;
+            content: '';
+            inset: 0;
+            pointer-events: none;
+            position: absolute;
+        }
+    }
+
+    .lens-frame-blocking {
+        aspect-ratio: auto;
+        height: calc(100cqh - 1.5rem);
+        width: calc(100cqw - 1.5rem);
+    }
+
+    .lens-frame-see-through {
+        background: none;
+    }
+
+    .lens-corners {
+        inset: 0.75rem;
+        opacity: 0.6;
+    }
+
+    .lens-frame-scanning .lens-corners {
+        animation: lens-breathe 2.8s ease-in-out infinite;
+    }
+
+    .lens-corner {
+        border: 0 solid var(--lens-mist);
+        height: 1.25rem;
+        width: 1.25rem;
+    }
+
+    .lens-corner-top-start {
+        border-top-left-radius: 0.75rem;
+        border-width: 2px 0 0 2px;
+    }
+
+    .lens-corner-top-end {
+        border-top-right-radius: 0.75rem;
+        border-width: 2px 2px 0 0;
+    }
+
+    .lens-corner-bottom-start {
+        border-bottom-left-radius: 0.75rem;
+        border-width: 0 0 2px 2px;
+    }
+
+    .lens-corner-bottom-end {
+        border-bottom-right-radius: 0.75rem;
+        border-width: 0 2px 2px 0;
+    }
+
+    .lens-status-line {
+        min-height: 2.75rem;
+        &:empty { min-height: 0.5rem; }
+    }
+
+    .lens-language-card {
+        align-items: center;
+        background: var(--lens-surface-2);
+        border: 1px solid var(--lens-border-strong);
+        border-radius: 18px;
+        color: var(--lens-text-primary);
+        display: flex;
+        gap: 12px;
+        max-width: 34rem;
+        padding: 12px 16px;
+        text-decoration: none;
+        width: 100%;
+
+        > ion-icon { color: var(--lens-indigo-soft); flex-shrink: 0; }
+        &:active { background: var(--lens-surface-3); }
+    }
+
+    .lens-language-column {
+        display: grid;
+        flex: 1;
+        gap: 4px;
+        min-width: 0;
+        small { color: var(--lens-text-secondary); font-size: 0.7rem; }
+        strong { font-size: 0.9rem; overflow-wrap: anywhere; }
+    }
+
+    .lens-status-label {
+        text-wrap: balance;
+    }
+
+    .lens-control-slot {
+        height: 3rem;
+        width: 3rem;
+    }
+
+    .lens-shutter {
+        all: unset;
+        border-radius: var(--lens-radius-md);
+        cursor: pointer;
+        padding: 0.25rem;
+    }
+
+    .lens-shutter-ring {
+        border: 3px solid #fff;
+        box-shadow: 0 0.5rem 1.5rem -0.75rem #4f46e5cc;
+        box-sizing: border-box;
+        height: 3.75rem;
+        padding: 3px;
+        transition: transform 150ms;
+        width: 3.75rem;
+    }
+
+    .lens-shutter:active .lens-shutter-ring {
+        transform: scale(0.94);
+    }
+
+    .lens-shutter-core {
+        background: var(--lens-indigo-strong);
+        color: #fff;
+        font-size: 1.375rem;
+        height: 100%;
+        width: 100%;
+    }
+
+    .lens-shutter-frozen .lens-shutter-core {
+        color: var(--lens-amber-text);
+    }
+}
+
+@keyframes lens-breathe {
+    50% {
+        opacity: 0.35;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 32rem) {
+    :host {
+        .lens-camera {
+            flex-direction: row;
+        }
+
+        .lens-controls {
+            flex-basis: 11rem;
+        }
+
+        .lens-control-row {
+            flex-direction: column;
+        }
+
+        .lens-control-slot:empty {
+            display: none;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :host {
+        .lens-corners {
+            animation: none !important;
+        }
+
+        .lens-shutter-ring {
+            transition: none;
+        }
+    }
+}

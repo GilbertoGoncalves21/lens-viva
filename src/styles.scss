@@ -1,1 +1,149 @@
-/* You can add global styles to this file, and also import other style files */
+@use 'sass:color';
+@use 'app/shared/styles/swal-theme';
+@use 'app/shared/styles/ionic-theme';
+@use 'app/shared/styles/page-theme';
+@use 'app/shared/styles/splash-theme';
+
+$lens-background: #0b1120;
+$lens-text: #f1f5f9;
+
+@function rgb-triplet($value) {
+    @return color.channel($value, 'red', $space: rgb), color.channel($value, 'green', $space: rgb), color.channel($value, 'blue', $space: rgb);
+}
+
+@mixin ion-color($name, $base, $contrast) {
+    --ion-color-#{$name}: #{$base};
+    --ion-color-#{$name}-rgb: #{rgb-triplet($base)};
+    --ion-color-#{$name}-contrast: #{$contrast};
+    --ion-color-#{$name}-contrast-rgb: #{rgb-triplet($contrast)};
+    --ion-color-#{$name}-shade: #{color.mix(#000000, $base, 12%)};
+    --ion-color-#{$name}-tint: #{color.mix(#ffffff, $base, 10%)};
+}
+
+:root,
+:root.md,
+:root.ios {
+    color-scheme: dark;
+
+    --lens-font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --lens-font-brand: 'Nunito Variable', 'Inter Variable', system-ui, sans-serif;
+    --ion-font-family: var(--lens-font-sans);
+
+    --lens-radius-sm: 10px;
+    --lens-radius-md: 16px;
+    --lens-radius-lg: 24px;
+    --lens-radius-pill: 999px;
+
+    --lens-surface-0: #0b1120;
+    --lens-surface-1: #0f172a;
+    --lens-surface-2: #16213a;
+    --lens-surface-3: #1e293b;
+    --lens-border-subtle: rgba(229, 231, 235, 0.1);
+    --lens-border-strong: rgba(229, 231, 235, 0.18);
+    --lens-text-primary: #f1f5f9;
+    --lens-text-secondary: #a5b4c8;
+    --lens-text-body: #cbd5e1;
+    --lens-glass: rgba(15, 23, 42, 0.78);
+    --lens-shadow-card: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 12px 32px -20px rgba(2, 6, 23, 0.9);
+    --lens-shadow-lg: 0 24px 48px -24px rgba(2, 6, 23, 0.85);
+
+    --lens-indigo: #6366f1;
+    --lens-indigo-strong: #4f46e5;
+    --lens-indigo-strong-active: #4338ca;
+    --lens-indigo-text: #818cf8;
+    --lens-indigo-soft: #c7d2fe;
+    --lens-amber: #f59e0b;
+    --lens-amber-text: #fcd34d;
+    --lens-danger-text: #fca5a5;
+    --lens-slate: #0f172a;
+    --lens-mist: #e5e7eb;
+    --lens-focus-ring: #a5b4fc;
+
+    --lens-motion-fast: 150ms;
+    --lens-motion-base: 220ms;
+    --lens-easing: cubic-bezier(0.2, 0, 0, 1);
+
+    @include ion-color('primary', #818cf8, $lens-background);
+    @include ion-color('secondary', #f59e0b, #0f172a);
+    @include ion-color('tertiary', #c4b5fd, $lens-background);
+    @include ion-color('success', #34d399, $lens-background);
+    @include ion-color('warning', #fbbf24, $lens-background);
+    @include ion-color('danger', #f87171, $lens-background);
+    @include ion-color('light', #e5e7eb, #0f172a);
+    @include ion-color('medium', #a5b4c8, $lens-background);
+    @include ion-color('dark', #0f172a, #ffffff);
+
+    --ion-background-color: #{$lens-background};
+    --ion-background-color-rgb: #{rgb-triplet($lens-background)};
+    --ion-text-color: #{$lens-text};
+    --ion-text-color-rgb: #{rgb-triplet($lens-text)};
+
+    @for $step from 1 through 19 {
+        --ion-background-color-step-#{$step * 50}: #{color.mix($lens-text, $lens-background, $step * 5%)};
+        --ion-text-color-step-#{$step * 50}: #{color.mix($lens-background, $lens-text, $step * 5%)};
+    }
+
+    --ion-backdrop-color: #020617;
+    --ion-backdrop-opacity: 0.6;
+    --ion-border-color: var(--lens-border-subtle);
+    --ion-card-background: var(--lens-surface-2);
+    --ion-item-background: var(--lens-surface-2);
+    --ion-item-border-color: rgba(229, 231, 235, 0.08);
+    --ion-overlay-background-color: var(--lens-surface-2);
+    --ion-placeholder-color: var(--lens-text-secondary);
+    --ion-tab-bar-background: var(--lens-surface-1);
+    --ion-toolbar-background: var(--lens-surface-0);
+    --ion-toolbar-color: var(--lens-text-primary);
+
+    --bs-body-bg: var(--lens-surface-0);
+    --bs-body-bg-rgb: #{rgb-triplet($lens-background)};
+    --bs-body-color: var(--lens-text-primary);
+    --bs-body-color-rgb: #{rgb-triplet($lens-text)};
+    --bs-body-font-family: var(--lens-font-sans);
+    --bs-border-color: var(--lens-border-subtle);
+    --bs-border-color-translucent: var(--lens-border-subtle);
+    --bs-emphasis-color: #ffffff;
+    --bs-emphasis-color-rgb: 255, 255, 255;
+    --bs-heading-color: inherit;
+    --bs-secondary-color: var(--lens-text-secondary);
+    --bs-secondary-color-rgb: 165, 180, 200;
+    --bs-tertiary-color: var(--lens-text-secondary);
+
+    --lens-balloon-color: #ffffff;
+    --lens-debug-outline: #f59e0b;
+}
+
+html {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    scrollbar-color: var(--lens-surface-3) transparent;
+    text-rendering: optimizeLegibility;
+}
+
+body {
+    background: var(--lens-surface-0);
+    color: var(--lens-text-primary);
+    font-family: var(--lens-font-sans);
+}
+
+::selection {
+    background: rgba(99, 102, 241, 0.45);
+    color: #ffffff;
+}
+
+:focus-visible {
+    outline: 2px solid var(--lens-focus-ring);
+    outline-offset: 2px;
+}
+
+[tabindex='-1']:focus:not(:focus-visible) {
+    outline: none;
+}
+
+body.lens-camera-active,
+body.lens-camera-active ion-app,
+body.lens-camera-active ion-router-outlet {
+    background: transparent !important;
+    --background: transparent;
+    --ion-background-color: transparent;
+}

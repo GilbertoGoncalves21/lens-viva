@@ -1,12 +1,22 @@
 {
   "name": "lens-viva",
-  "version": "0.0.0",
+  "version": "0.1.2",
+  "description": "Camera text recognition and translation with on-device Android processing and optional contextual Gemini translation.",
+  "engines": {
+    "node": "^22.22.3 || ^24.15.0 || >=26.0.0",
+    "npm": ">=11"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "android:sync": "ng build && cap sync android",
+    "android:open": "cap open android",
+    "android:run": "ng build && cap run android",
+    "server:start": "node --env-file=server/.env server/index.mjs",
+    "server:test": "node --test server/app.test.mjs server/gemini.test.mjs"
   },
   "private": true,
   "packageManager": "npm@11.16.0",
@@ -17,13 +27,28 @@
     "@angular/forms": "^22.2.0",
     "@angular/platform-browser": "^22.2.0",
     "@angular/router": "^22.2.0",
+    "@capacitor/android": "8.5.3",
+    "@capacitor/app": "8.1.2",
+    "@capacitor/core": "8.5.3",
+    "@capacitor/device": "8.0.3",
+    "@capacitor/preferences": "8.0.1",
+    "@fontsource-variable/inter": "5.3.0",
+    "@fontsource-variable/nunito": "5.3.0",
+    "@ionic/angular": "9.0.7",
+    "@ngx-translate/core": "18.0.0",
+    "@ngx-translate/http-loader": "18.0.0",
+    "bootstrap": "5.3.8",
+    "ionicons": "8.1.0",
     "rxjs": "~7.8.0",
+    "sweetalert2": "11.26.25",
+    "tesseract.js": "7.0.0",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
     "@angular/build": "^22.2.3",
     "@angular/cli": "^22.2.3",
     "@angular/compiler-cli": "^22.2.0",
+    "@capacitor/cli": "8.5.3",
     "jsdom": "^30.0.0",
     "prettier": "^3.8.1",
     "typescript": "~6.0.2",

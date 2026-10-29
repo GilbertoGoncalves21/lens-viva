@@ -1,0 +1,268 @@
+@use 'sass:map';
+@use 'theme-mixins' as theme;
+
+$lens-swal-icon-colors: (
+    'error': #f87171,
+    'info': var(--lens-indigo-text),
+    'question': #a5b4fc,
+    'success': #34d399,
+    'warning': var(--lens-amber),
+);
+
+$lens-swal-select-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a5b4c8' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+
+@keyframes lens-swal-enter {
+    from {
+        opacity: 0;
+        transform: translateY(0.75rem) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes lens-swal-leave {
+    to {
+        opacity: 0;
+        transform: scale(0.97);
+    }
+}
+
+@keyframes lens-swal-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.swal2-container {
+    --lens-swal-danger: #dc2626;
+    --lens-swal-danger-active: #991b1b;
+    --lens-swal-danger-hover: #b91c1c;
+    --lens-swal-field-border: #74839e;
+    --lens-swal-loader: var(--lens-indigo-text);
+    --swal2-backdrop: rgba(2, 6, 23, 0.72);
+    --swal2-backdrop-transition: background-color var(--lens-motion-base, 220ms) ease, backdrop-filter var(--lens-motion-base, 220ms) ease;
+    --swal2-container-padding: 1rem;
+
+    z-index: 30000;
+    font-family: var(--lens-font-sans);
+
+    &.swal2-backdrop-show {
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+    }
+
+    &.swal2-backdrop-hide {
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
+
+    .swal2-popup {
+        --swal2-actions-margin: 1.5rem 0 0;
+        --swal2-actions-width: 100%;
+        --swal2-background: var(--lens-surface-2);
+        --swal2-border: 1px solid var(--lens-border-subtle);
+        --swal2-border-radius: var(--lens-radius-lg);
+        --swal2-color: var(--lens-text-primary);
+        --swal2-hide-animation: lens-swal-leave 0.14s ease-in forwards;
+        --swal2-html-container-padding: 0.5rem 0 0;
+        --swal2-icon-zoom: 0.72;
+        --swal2-input-background: var(--lens-surface-3);
+        --swal2-padding: 1.75rem 1.25rem 1.25rem;
+        --swal2-show-animation: lens-swal-enter var(--lens-motion-base, 220ms) var(--lens-easing, cubic-bezier(0.2, 0, 0, 1));
+        --swal2-title-padding: 0;
+        --swal2-validation-message-background: var(--lens-surface-3);
+        --swal2-validation-message-color: var(--lens-text-primary);
+        --swal2-width: 24rem;
+
+        background-image: theme.$dialog-glow;
+        box-shadow: theme.$dialog-shadow;
+        color-scheme: dark;
+        font-family: var(--lens-font-sans);
+    }
+
+    .swal2-icon {
+        margin: 0 auto 1.5rem;
+
+        .swal2-icon-content {
+            font-family: var(--lens-font-brand);
+            font-weight: 800;
+        }
+    }
+
+    @each $name, $color in $lens-swal-icon-colors {
+        .swal2-icon.swal2-#{$name} {
+            border-color: color-mix(in srgb, #{$color} 45%, transparent);
+            background-color: color-mix(in srgb, #{$color} 14%, transparent);
+            color: $color;
+        }
+    }
+
+    .swal2-icon.swal2-success {
+        [class^='swal2-success-circular-line'],
+        .swal2-success-fix,
+        .swal2-success-ring {
+            display: none;
+        }
+
+        [class^='swal2-success-line'] {
+            background-color: map.get($lens-swal-icon-colors, 'success');
+        }
+    }
+
+    .swal2-icon.swal2-error [class^='swal2-x-mark-line'] {
+        background-color: map.get($lens-swal-icon-colors, 'error');
+    }
+
+    .swal2-title {
+        @include theme.dialog-title;
+    }
+
+    .swal2-html-container {
+        @include theme.dialog-message;
+    }
+
+    .swal2-select {
+        appearance: none;
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        min-height: 3rem;
+        margin: 1.25rem 0 0;
+        padding: 0.75rem 3rem 0.75rem 1rem;
+        border: 1px solid var(--lens-swal-field-border);
+        border-radius: var(--lens-radius-md);
+        background: var(--lens-surface-3) $lens-swal-select-chevron no-repeat right 1rem center / 1.25rem;
+        color: var(--lens-text-primary);
+        font-family: var(--lens-font-sans);
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+
+        &:hover {
+            border-color: var(--lens-text-secondary);
+        }
+
+        &:focus,
+        &:focus-visible {
+            @include theme.focus-ring;
+            border-color: var(--lens-swal-loader);
+            box-shadow: none;
+        }
+
+        option {
+            background-color: var(--lens-surface-3);
+            color: var(--lens-text-primary);
+        }
+    }
+
+    .swal2-actions {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .swal2-styled {
+        width: 100%;
+        @include theme.dialog-button;
+
+        &.swal2-confirm {
+            @include theme.dialog-confirm-button;
+        }
+
+        &.swal2-confirm.lens-swal-destructive {
+            background-color: var(--lens-swal-danger);
+            box-shadow: 0 10px 24px -12px rgba(220, 38, 38, 0.8);
+            color: #ffffff;
+
+            &:hover {
+                background-color: var(--lens-swal-danger-hover);
+            }
+
+            &:active {
+                background-color: var(--lens-swal-danger-active);
+            }
+        }
+
+        &.swal2-cancel {
+            @include theme.dialog-cancel-button;
+        }
+    }
+
+    .swal2-loader {
+        width: 2.75rem;
+        height: 2.75rem;
+        margin: 0;
+        border-width: 0.25rem;
+        border-style: solid;
+        border-color: color-mix(in srgb, var(--lens-swal-loader) 20%, transparent);
+        border-top-color: var(--lens-swal-loader);
+        border-radius: 50%;
+        animation: lens-swal-spin 0.9s linear infinite;
+    }
+
+    .swal2-popup.lens-swal-loading {
+        --swal2-actions-margin: 0;
+        --swal2-padding: 2rem 1.5rem;
+        --swal2-title-padding: 1.25rem 0 0;
+        --swal2-width: 18rem;
+
+        .swal2-actions {
+            order: -1;
+        }
+
+        .swal2-title {
+            font-family: var(--lens-font-sans);
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0;
+        }
+    }
+}
+
+@media (min-width: 576px) {
+    .swal2-container {
+        .swal2-popup {
+            --swal2-padding: 2rem 2rem 1.75rem;
+            --swal2-width: 28rem;
+        }
+
+        .swal2-actions {
+            flex-direction: row;
+            align-items: stretch;
+        }
+
+        .swal2-styled {
+            flex: 1 1 0;
+            width: auto;
+            min-width: 0;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .swal2-container {
+        --swal2-backdrop-transition: none;
+
+        .swal2-popup {
+            --swal2-hide-animation: none;
+            --swal2-show-animation: none;
+        }
+
+        .swal2-popup .swal2-icon.swal2-icon-show,
+        .swal2-popup .swal2-icon.swal2-icon-show * {
+            animation: none;
+        }
+
+        .swal2-loader {
+            animation-duration: 2.4s;
+        }
+
+        .swal2-styled {
+            @include theme.dialog-static-button;
+        }
+    }
+}
